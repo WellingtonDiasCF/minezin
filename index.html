@@ -339,6 +339,73 @@ footer{
 }
 footer b{color:var(--ink-2)}
 
+
+/* ============ atmosfera ============
+   A pagina tem ceu: um calor de tocha no alto que desce para a ardosia.
+   Fixo, para nao correr junto com o texto. */
+body::before{
+  content:""; position:fixed; inset:0 0 auto; height:70vh; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(90ch 46vh at 68% -8%, rgba(224,154,69,.10), transparent 70%),
+    radial-gradient(70ch 40vh at 12% -12%, rgba(120,96,168,.10), transparent 72%);
+}
+.topbar, .wrap{position:relative; z-index:1}
+
+/* ============ o horizonte da abertura ============ */
+.hero-art{
+  position:relative; border-radius:14px; overflow:hidden;
+  border:1px solid var(--line-2); background:#0D1220;
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 30px 60px -34px rgba(0,0,0,1);
+  aspect-ratio:4/3; max-height:52vh;
+}
+@media (min-width:520px){.hero-art{aspect-ratio:16/9; max-height:none}}
+@media (min-width:900px){.hero-art{aspect-ratio:21/9}}
+.hero-art svg{display:block; width:100%; height:100%; object-fit:cover}
+.hero-art::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(to top, rgba(14,18,22,.97) 0%, rgba(14,18,22,.80) 14%, rgba(14,18,22,0) 40%),
+    radial-gradient(120% 90% at 50% 42%, transparent 52%, rgba(8,10,14,.55) 100%);
+}
+.hero-selo{position:absolute; left:0; right:0; bottom:0; z-index:2; padding:20px 22px 18px}
+@media (min-width:700px){.hero-selo{padding:30px 34px 28px}}
+.hero-olho{
+  display:block; font:600 10.5px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+  color:#F3C892; margin-bottom:10px; text-shadow:0 1px 8px rgba(0,0,0,.95);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.hero-selo h1.big{text-shadow:0 2px 22px rgba(0,0,0,.75), 0 1px 3px rgba(0,0,0,.9)}
+.hero-top{padding-top:22px}
+.hero-top p.lead{margin-top:0}
+
+/* ============ materia nos blocos ============
+   Uma luz fina na aresta de cima e sombra funda embaixo: o cartao fica
+   com espessura, em vez de ser um retangulo pintado. */
+.card, .coord, .mapwrap, details.acc{
+  background-image:linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,0) 78px);
+  box-shadow:0 1px 0 rgba(255,255,255,.045) inset, 0 22px 40px -30px rgba(0,0,0,.9);
+  border-radius:14px;
+}
+.card{border-radius:14px}
+.card.lift{
+  background-image:
+    linear-gradient(180deg, rgba(224,154,69,.09), rgba(255,255,255,0) 120px),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0) 78px);
+  border-color:var(--red-line);
+}
+.well{background-image:linear-gradient(180deg, rgba(255,255,255,.022), rgba(255,255,255,0) 40px)}
+
+/* O tirinho ambar antes do olho de secao: uma tocha pequena marcando
+   onde comeca cada assunto. */
+.eyebrow{display:flex; align-items:center; gap:9px}
+.eyebrow::before{content:""; width:16px; height:2px; background:var(--red); flex:0 0 auto; box-shadow:0 0 10px rgba(224,154,69,.7)}
+.sec-head h2{font-size:clamp(23px,4.8vw,32px)}
+
+.navbtn[aria-current="true"]{text-shadow:0 0 18px rgba(230,220,198,.28)}
+.mapbox{box-shadow:inset 0 0 90px -30px rgba(0,0,0,.95)}
+.livechip::before{animation:pulsa 2.6s ease-in-out infinite}
+@keyframes pulsa{0%,100%{box-shadow:0 0 0 3px rgba(82,168,123,.16)}50%{box-shadow:0 0 0 5px rgba(82,168,123,.05)}}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none !important; animation:none !important}
@@ -1530,12 +1597,129 @@ function cabecalho(olho,titulo,texto){
 function poco(k,v,cls){return `<div class="well"><div class="k">${esc(k)}</div><div class="v ${cls||""}">${esc(v)}</div></div>`;}
 function pocoHtml(k,v,cls){return `<div class="well"><div class="k">${esc(k)}</div><div class="v ${cls||""}">${v}</div></div>`;}
 
+
+/* ---------- horizonte da abertura ----------
+   O desenho nasce da propria seed do mundo: o mesmo numero que gerou o
+   terreno alimenta o sorteio das cristas, das cerejeiras e das estrelas.
+   Sol quadrado, como no jogo. Tudo em degraus de bloco, nada de curva. */
+function svgHero(){
+  const W = 1200, H = 520, B = 20, COLS = W / B;
+  let a = 2684991254 >>> 0;
+  const rnd = () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const bloco = (x, y, w, h, cor, op) =>
+    '<rect x="' + x.toFixed(0) + '" y="' + y.toFixed(0) + '" width="' + w.toFixed(0) +
+    '" height="' + h.toFixed(0) + '" fill="' + cor + '"' + (op ? ' opacity="' + op + '"' : '') + '/>';
+
+  /* Caminhada aleatoria travada numa faixa: a crista sobe e desce em
+     degraus inteiros de bloco e nunca escapa do alcance. */
+  const crista = (base, alcance, aspereza) => {
+    const hs = []; let h = base;
+    for(let i = 0; i <= COLS; i++){
+      if(rnd() < aspereza) h += rnd() < .5 ? -1 : 1;
+      h = Math.max(base - alcance, Math.min(base + alcance, h));
+      hs.push(h);
+    }
+    return hs;
+  };
+  const chao = (hs, cor, op) => {
+    let d = "M0," + H;
+    for(let i = 0; i < hs.length; i++) d += " L" + (i*B) + "," + (hs[i]*B) + " L" + ((i+1)*B) + "," + (hs[i]*B);
+    return '<path d="' + d + ' L' + W + ',' + H + ' Z" fill="' + cor + '"' + (op ? ' opacity="' + op + '"' : '') + '/>';
+  };
+
+  /* Cerejeira em blocos: tronco fino, copa em quatro fileiras, mais clara
+     em cima porque o sol vem de la. */
+  const arvore = (col, solo, alt, c1, c2, c3, tr) => {
+    const x = col*B, base = solo*B, topo = base - alt*B;
+    let o = bloco(x + B*0.35, topo, B*0.5, alt*B + B, tr);
+    o += bloco(x - B, topo - 4*B, 3*B, B, c1);
+    o += bloco(x - 2*B, topo - 3*B, 5*B, B, c1);
+    o += bloco(x - 2*B, topo - 2*B, 5*B, B, c2);
+    o += bloco(x - B, topo - B, 3*B, B, c3);
+    return o;
+  };
+
+  let g = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Fim de tarde sobre o bosque de cerejeiras do spawn, desenhado a partir da seed do mundo">';
+  g += '<defs>'
+    + '<linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">'
+    +   '<stop offset="0" stop-color="#0C1120"/><stop offset=".26" stop-color="#1B1932"/>'
+    +   '<stop offset=".46" stop-color="#3B2C48"/><stop offset=".62" stop-color="#7A4750"/>'
+    +   '<stop offset=".74" stop-color="#C4743F"/><stop offset=".82" stop-color="#EAAA5E"/>'
+    +   '<stop offset="1" stop-color="#F2C782"/>'
+    + '</linearGradient>'
+    + '<radialGradient id="brilho"><stop offset="0" stop-color="#FFE0AC" stop-opacity=".9"/>'
+    +   '<stop offset=".4" stop-color="#EE9A42" stop-opacity=".34"/>'
+    +   '<stop offset="1" stop-color="#EE9A42" stop-opacity="0"/></radialGradient>'
+    + '<linearGradient id="agua" x1="0" y1="0" x2="0" y2="1">'
+    +   '<stop offset="0" stop-color="#7B7F92"/><stop offset=".35" stop-color="#3F5470"/>'
+    +   '<stop offset="1" stop-color="#1A2B41"/></linearGradient>'
+    + '</defs>';
+
+  g += bloco(0, 0, W, H, "url(#ceu)");
+
+  /* estrelas: quadradinhos, sumindo conforme o ceu esquenta */
+  for(let i = 0; i < 110; i++){
+    const x = Math.floor(rnd()*COLS)*B + Math.floor(rnd()*B);
+    const y = Math.floor(rnd()*13)*B + Math.floor(rnd()*B);
+    const op = +(0.9 - y/300).toFixed(2);
+    if(op > 0.06) g += bloco(x, y, 3, 3, "#F6EDDF", op);
+  }
+
+  /* o sol, quadrado */
+  const solX = 760, solY = 196;
+  g += '<circle cx="' + (solX+40) + '" cy="' + (solY+40) + '" r="230" fill="url(#brilho)"/>';
+  g += bloco(solX, solY, 80, 80, "#FFDFA6");
+  g += bloco(solX + 10, solY + 10, 60, 60, "#FFF7E8");
+
+  /* serra distante, neblina, serra proxima */
+  g += chao(crista(13, 3, .44), "#2F2A49", ".92");
+  g += bloco(0, 12*B, W, 4*B, "#D89A66", ".13");
+  const meia = crista(15, 2, .32);
+  [6, 14, 23, 31, 40, 48, 57].forEach(c => {
+    if(c < meia.length) g += arvore(c, meia[c], 1, "#5E4257", "#54394D", "#472F42", "#2E2233");
+  });
+  g += chao(meia, "#241F38");
+  g += bloco(0, 15*B, W, 3*B, "#C9835A", ".10");
+
+  /* o lago, com o reflexo do sol descendo em degraus */
+  g += bloco(0, 17*B, W, 4*B, "url(#agua)", ".95");
+  g += bloco(0, 17*B, W, 3, "#F5CE94", ".45");
+  for(let r = 0; r < 6; r++){
+    const larg = 80 - r*11, x = solX + (80-larg)/2;
+    g += bloco(x, 17*B + r*14, larg, 6, "#FFE3B0", +(0.55 - r*.08).toFixed(2));
+  }
+
+  /* margem de casa: as cerejeiras do spawn */
+  const margem = crista(21, 1, .28);
+  [3, 8, 13, 18, 24, 30, 36, 43, 50, 56].forEach(c => {
+    if(c < margem.length) g += arvore(c, margem[c], 2 + Math.floor(rnd()*2), "#EFA0B8", "#D2799A", "#A9587B", "#3B2A2F");
+  });
+  g += chao(margem, "#16202A");
+  g += chao(crista(24, 1, .18), "#0E1216");
+
+  /* petala levada pelo vento */
+  for(let i = 0; i < 16; i++){
+    g += bloco(Math.floor(rnd()*W), 300 + Math.floor(rnd()*180), 4, 4, "#EFA0B8", +(0.25 + rnd()*.45).toFixed(2));
+  }
+  return g + '</svg>';
+}
 /* ---------- 01 ENTRAR ---------- */
 function pagEntrar(){
   return `
   <div class="hero">
+    <div class="hero-art">
+      ${svgHero()}
+      <div class="hero-selo">
+        <span class="hero-olho">Bosque de cerejeiras &middot; spawn</span>
+        <h1 class="big">Minezin Emo</h1>
+      </div>
+    </div>
     <div class="hero-top">
-      <h1 class="big">Minezin Emo</h1>
       <p class="lead">Servidor Bedrock de sobrevivência, versão ${esc(MUNDO.versao)}, no ar 24 horas por dia.
       Mundo próprio, seis addons e o mapa já medido bioma por bioma. Esta página é o manual da casa:
       como entrar, onde ficam as coisas e como jogar bem aqui.</p>
