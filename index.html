@@ -1,0 +1,2566 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Minezin Emo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap">
+<style>
+/* =====================================================================
+   MINEZIN EMO — dossie de ardosia
+   Fundo de deepslate: azul-preto, nao preto neutro. Tipografia em osso.
+   O ambar de tocha e reservado ao que se clica; verde, ouro e redstone
+   dizem estado. Cor cromatica de verdade so dentro do mapa, onde ela e
+   dado e nao enfeite. Tema unico e escuro por escolha — a pagina pinta o
+   proprio fundo e nunca empresta o tema do host.
+   ===================================================================== */
+:root{
+  --ground:#0E1216; --surface:#161B21; --sunk:#0A0D10; --raised:#1E242B;
+  --ink:#E9EDF1; --ink-2:#B6C1CB; --muted:#7C8996; --faint:#54606C;
+  --line:#212930; --line-2:#2F3941;
+  --bone:#E6DCC6; --bone-dim:#8E8778;
+  --red:#E09A45; --red-hi:#F0B76B; --red-soft:#1E1710; --red-line:#4B3A1E;
+  --ok:#52A87B; --ok-soft:#101B15;
+  --warn:#C4A03A; --warn-soft:#1B1810;
+  --crit:#D45A4E; --crit-soft:#1D1211;
+  --shadow:0 1px 0 rgba(255,255,255,.03), 0 18px 40px -26px rgba(0,0,0,.95);
+  --r:6px; --r-lg:10px;
+  --display:"IBM Plex Sans Condensed","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --head-h:56px;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box; min-width:0}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.6;
+  -webkit-text-size-adjust:100%; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--display); margin:0; text-wrap:balance; color:var(--ink); font-weight:600; line-height:1.15}
+p{margin:0}
+a{color:var(--red-hi); text-underline-offset:3px; text-decoration-thickness:1px}
+a:hover{color:var(--bone)}
+:focus-visible{outline:2px solid var(--red); outline-offset:2px; border-radius:2px}
+::selection{background:var(--red); color:#12161A}
+b,strong{font-weight:600; color:var(--ink)}
+
+.wrap{max-width:1160px; margin:0 auto; padding:0 18px 80px}
+@media (min-width:1040px){
+  .wrap{display:grid; grid-template-columns:222px minmax(0,1fr); gap:44px; align-items:start; padding:0 32px 110px}
+}
+
+/* ============ topo ============
+   O nome rola embora no celular; quem fica grudado e a navegacao, sozinha
+   no topo. Sem soma de alturas e sem faixa transparente entre as duas
+   barras — que era por onde o texto da pagina passava por tras da nav. */
+.topbar{background:var(--ground); border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1160px; margin:0 auto; padding:13px 18px; display:flex; align-items:center; gap:12px}
+@media (min-width:1040px){
+  .topbar{position:sticky; top:0; z-index:40}
+  .topbar-in{padding:14px 32px}
+}
+.mark{display:flex; align-items:baseline; gap:10px; min-width:0; flex:1}
+.glyph{
+  align-self:center; width:26px; height:26px; flex:0 0 auto; display:grid; place-items:center;
+  background:var(--bone); color:#12161A; border-radius:3px;
+  font:700 11px/1 var(--mono); letter-spacing:-.02em;
+}
+.mark b{
+  font-family:var(--display); font-weight:700; font-size:17px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--bone); white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.mark i{font-style:normal; color:var(--faint); font:500 11px/1 var(--mono); letter-spacing:.08em; white-space:nowrap; display:none}
+@media (min-width:560px){.mark i{display:inline}}
+.topbar .spacer{display:none}
+.livechip{
+  display:inline-flex; align-items:center; gap:7px; height:26px; padding:0 10px; flex:0 0 auto;
+  border:1px solid var(--line-2); border-radius:3px; background:var(--sunk); color:var(--muted);
+  font:600 10px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; white-space:nowrap;
+}
+.livechip::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px rgba(82,168,123,.16)}
+
+/* ============ navegacao ============ */
+nav.rail{
+  position:sticky; top:0; z-index:30; background:var(--ground);
+  margin:0 -18px 26px; border-bottom:1px solid var(--line);
+}
+.rail-scroll{
+  display:flex; gap:2px; overflow-x:auto; padding:0 12px; scrollbar-width:none;
+  scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+}
+.rail-scroll::-webkit-scrollbar{display:none}
+.navbtn{
+  flex:0 0 auto; scroll-snap-align:start; min-height:46px; padding:0 12px;
+  border:0; border-bottom:2px solid transparent; background:none; color:var(--muted);
+  font:600 15px/1 var(--body); cursor:pointer; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:8px; letter-spacing:.01em;
+}
+.navbtn .n{font:500 10px/1 var(--mono); color:var(--faint); letter-spacing:.06em}
+.navbtn:hover{color:var(--ink-2)}
+.navbtn[aria-current="true"]{color:var(--bone); border-bottom-color:var(--red)}
+.navbtn[aria-current="true"] .n{color:var(--red)}
+@media (min-width:1040px){
+  nav.rail{
+    top:calc(var(--head-h) + 26px); margin:26px 0 0; border:0;
+    padding:2px 0; align-self:start;
+  }
+  .rail-scroll{flex-direction:column; overflow:visible; padding:0; gap:0}
+  .navbtn{
+    width:100%; justify-content:flex-start; min-height:0; padding:9px 0 9px 14px;
+    border-bottom:0; border-left:1px solid var(--line); font-size:15.5px;
+  }
+  .navbtn:hover{border-left-color:var(--line-2); color:var(--ink-2)}
+  .navbtn[aria-current="true"]{border-left:1px solid var(--red); color:var(--bone)}
+}
+
+/* ============ secoes ============ */
+.page{display:none}
+.page.on{display:block; animation:sobe .26s ease both}
+@keyframes sobe{from{opacity:.55; transform:translateY(4px)}to{opacity:1; transform:none}}
+main>.page>section{padding-top:34px; margin-top:34px; border-top:1px solid var(--line)}
+main>.page>section:first-child{padding-top:26px; margin-top:0; border-top:0}
+main>.page>.hero+section{border-top:0; margin-top:0; padding-top:6px}
+.sec-head{margin-bottom:18px; max-width:66ch}
+.eyebrow{font:600 10.5px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--bone-dim); display:block; margin-bottom:11px}
+.sec-head h2{font-size:clamp(21px,4.4vw,29px); font-weight:600; letter-spacing:-.005em; color:var(--bone)}
+.sec-head p{color:var(--muted); font-size:15.5px; margin-top:9px}
+h1.big{
+  font-family:var(--display); font-size:clamp(38px,10vw,74px); font-weight:700;
+  line-height:.98; letter-spacing:-.022em; color:var(--bone); text-transform:none;
+}
+
+/* ============ abertura ============ */
+.hero{margin:6px 0 8px; padding-bottom:30px; border-bottom:1px solid var(--line)}
+.hero-top{padding:0}
+.hero-top p.lead{color:var(--ink-2); font-size:17px; line-height:1.62; margin-top:18px; max-width:60ch}
+.rule{display:none}
+.seedrow{display:flex; flex-wrap:wrap; gap:0; margin-top:24px; border:1px solid var(--line); border-radius:var(--r)}
+.seedchip{
+  display:inline-flex; align-items:baseline; gap:8px; flex:1 1 auto; padding:11px 14px;
+  background:none; border:0; border-right:1px solid var(--line);
+  font:400 12px/1.2 var(--mono); color:var(--muted);
+  letter-spacing:.1em; text-transform:uppercase; white-space:nowrap;
+}
+.seedrow .seedchip:last-child{border-right:0}
+.seedchip b{font:600 15px/1.2 var(--mono); color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:0; text-transform:none}
+button.seedchip{cursor:pointer}
+button.seedchip:hover{background:var(--surface)}
+@media (max-width:560px){
+  .seedrow{flex-direction:column}
+  .seedchip{border-right:0; border-bottom:1px solid var(--line); justify-content:space-between}
+  .seedrow .seedchip:last-child{border-bottom:0}
+}
+
+/* ============ mapa ============ */
+.mapwrap{border:1px solid var(--line); border-radius:var(--r-lg); background:var(--sunk); overflow:hidden}
+.mapgrid{display:grid; grid-template-columns:1fr}
+@media (min-width:900px){.mapgrid{grid-template-columns:minmax(0,1fr) 268px}}
+.mapbox{padding:12px; background:radial-gradient(circle at 50% 45%, rgba(224,154,69,.05), transparent 62%), var(--sunk)}
+.mapbox svg{display:block; width:100%; height:auto; border-radius:4px}
+.maplegend{border-top:1px solid var(--line); padding:18px; background:var(--surface)}
+@media (min-width:900px){.maplegend{border-top:0; border-left:1px solid var(--line)}}
+.maplegend h4{font:600 10.5px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--bone-dim); margin-bottom:13px}
+.legrow{display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-2); padding:3.5px 0; line-height:1.35}
+.legdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto}
+.legdot.sq{border-radius:2px}
+.zoombar{display:flex; gap:0; margin-top:18px; border:1px solid var(--line-2); border-radius:var(--r); overflow:hidden}
+.zoombtn{
+  flex:1 1 0; min-height:38px; padding:8px 6px; border:0; border-right:1px solid var(--line-2);
+  background:var(--sunk); color:var(--muted); font:500 12.5px/1 var(--mono); cursor:pointer; white-space:nowrap;
+}
+.zoombar .zoombtn:last-child{border-right:0}
+.zoombtn:hover{color:var(--ink-2)}
+.zoombtn[aria-pressed="true"]{background:var(--red); color:#12161A; font-weight:600}
+
+/* ============ blocos ============ */
+.grid{display:grid; gap:14px}
+@media (min-width:660px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:660px){.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.g3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:520px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:940px){.g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:18px; display:flex; flex-direction:column; gap:13px;
+}
+.card h3{font-size:17.5px; font-weight:600; letter-spacing:-.004em; color:var(--bone)}
+.card .sub{color:var(--muted); font-size:13.5px; margin-top:5px; font-family:var(--body); line-height:1.4}
+.card p{font-size:15.5px; color:var(--ink-2)}
+.card-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.card-head>div{min-width:0; flex:1 1 190px}
+.card.lift{background:var(--raised); border-color:var(--line-2); box-shadow:var(--shadow)}
+
+.well{background:var(--sunk); border-radius:var(--r); padding:12px 14px; min-width:0}
+.well .k{font:500 10px/1 var(--mono); letter-spacing:.13em; text-transform:uppercase; color:var(--faint)}
+.well .v{font:600 15px/1.35 var(--mono); color:var(--ink); margin-top:8px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+.well .v.sm{font-size:14px; font-weight:400; font-family:var(--body); color:var(--ink-2); line-height:1.45}
+.well .v.red{color:var(--red-hi)}
+.wells{display:grid; gap:9px; grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:720px){.wells.w4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:720px){.wells.w3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.wells.addr{grid-template-columns:minmax(0,1fr)}
+@media (min-width:420px){.wells.addr{grid-template-columns:minmax(0,1fr) 112px}}
+.wells.addr .v{font-size:clamp(16px,4.4vw,21px); letter-spacing:-.01em}
+
+.tag{
+  display:inline-flex; align-items:center; min-height:23px; padding:2px 9px; border-radius:3px;
+  font:600 11px/1 var(--mono); letter-spacing:.09em; text-transform:uppercase;
+  background:var(--sunk); color:var(--muted); border:1px solid var(--line);
+}
+.tag.r{background:var(--red-soft); color:var(--red-hi); border-color:var(--red-line)}
+.tag.b{background:var(--raised); color:var(--bone); border-color:var(--line-2)}
+.tag.ok{background:var(--ok-soft); color:var(--ok); border-color:rgba(82,168,123,.3)}
+.tag.warn{background:var(--warn-soft); color:var(--warn); border-color:rgba(196,160,58,.3)}
+.tag.crit{background:var(--crit-soft); color:var(--crit); border-color:rgba(212,90,78,.3)}
+.tags{display:flex; flex-wrap:wrap; gap:7px; align-items:center}
+
+.note{
+  border-left:2px solid var(--line-2); border-radius:0 var(--r) var(--r) 0;
+  background:var(--sunk); padding:13px 15px; font-size:15px; color:var(--ink-2); line-height:1.55;
+}
+.note b{color:var(--ink)}
+.note.warn{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.crit{border-left-color:var(--crit); background:var(--crit-soft)}
+.note.ok{border-left-color:var(--ok); background:var(--ok-soft)}
+.note.r{border-left-color:var(--red); background:var(--red-soft)}
+
+ul.list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+ul.list li{font-size:15px; color:var(--ink-2); padding-left:16px; position:relative; line-height:1.5}
+ul.list li::before{content:""; position:absolute; left:0; top:9px; width:6px; height:2px; background:var(--bone-dim)}
+ol.steps{margin:0; padding:0; list-style:none; counter-reset:s; display:flex; flex-direction:column; gap:11px}
+ol.steps li{
+  counter-increment:s; display:grid; grid-template-columns:20px minmax(0,1fr); gap:13px;
+  font-size:15px; color:var(--ink-2); line-height:1.5; align-items:start;
+}
+ol.steps li::before{
+  content:counter(s,decimal-leading-zero); color:var(--red);
+  font:600 11px/1.55 var(--mono); letter-spacing:.02em;
+}
+
+details.acc{border:1px solid var(--line); border-radius:var(--r); background:var(--surface); overflow:hidden}
+details.acc>summary{
+  padding:13px 15px; cursor:pointer; font:600 15px/1.35 var(--body); color:var(--ink);
+  list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:46px;
+}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"+"; font:400 18px/1 var(--mono); color:var(--red); flex:0 0 auto}
+details.acc[open]>summary::after{content:"\2212"}
+details.acc[open]>summary{border-bottom:1px solid var(--line); color:var(--bone)}
+details.acc:hover{border-color:var(--line-2)}
+.acc-body{padding:15px; display:flex; flex-direction:column; gap:13px}
+
+/* ============ filtros e botoes ============ */
+.filters{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:16px}
+.filters input, .filters select{
+  font:400 16px/1 var(--body); min-height:44px; padding:11px 13px; color:var(--ink);
+  background:var(--sunk); border:1px solid var(--line-2); border-radius:var(--r);
+}
+.filters input{flex:1 1 200px}
+.filters select{flex:0 1 auto; max-width:100%}
+.filters input::placeholder{color:var(--faint)}
+.filters input:focus, .filters select:focus{border-color:var(--red); outline:none; box-shadow:0 0 0 3px rgba(224,154,69,.16)}
+.btn{
+  min-height:44px; padding:11px 17px; border-radius:var(--r); cursor:pointer;
+  font:600 15px/1 var(--body); border:1px solid var(--line-2); background:var(--sunk); color:var(--ink-2);
+  transition:border-color .14s ease, color .14s ease, background .14s ease;
+}
+.btn:hover{border-color:var(--bone-dim); color:var(--ink)}
+.btn.p{background:var(--red); border-color:var(--red); color:#12161A; font-weight:600}
+.btn.p:hover{background:var(--red-hi); border-color:var(--red-hi); color:#12161A}
+.empty{padding:30px; text-align:center; color:var(--muted); font-size:15px; border:1px dashed var(--line-2); border-radius:var(--r-lg)}
+.hidden{display:none !important}
+
+/* ============ tabelas de dados ============
+   Sem cartao: regua fina entre linhas. Abaixo de 460px cada linha vira
+   duas, para o valor nunca encostar no nome. */
+.coord{border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface)}
+.coord-row{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto);
+  gap:4px 16px; padding:13px 15px; align-items:baseline;
+}
+.coord-row+.coord-row{border-top:1px solid var(--line)}
+.coord-row:hover{background:var(--raised)}
+.coord-row .nm{font-weight:500; font-size:15px; color:var(--ink); min-width:0; line-height:1.35}
+.coord-row .nm small{display:block; color:var(--muted); font-weight:400; font-size:13px; margin-top:3px; line-height:1.4}
+.coord-row .xyz{
+  font:500 13.5px/1.4 var(--mono); color:var(--bone); text-align:right;
+  font-variant-numeric:tabular-nums; white-space:nowrap; min-width:0;
+}
+.coord-row .xyz em{display:block; font-style:normal; font-weight:400; font-size:11.5px; color:var(--muted); margin-top:4px; letter-spacing:.04em}
+.coord-row.head{
+  background:var(--sunk); font:600 10px/1 var(--mono); letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); padding:10px 15px;
+}
+.coord-row.head:hover{background:var(--sunk)}
+.coord-row.head .xyz{color:var(--faint); font-size:10px; letter-spacing:.14em}
+@media (max-width:459px){
+  .coord-row{grid-template-columns:minmax(0,1fr)}
+  .coord-row .xyz{text-align:left; white-space:normal; margin-top:2px}
+  .coord-row .xyz em{margin-top:2px}
+  .coord-row.head{display:none}
+}
+
+/* ============ diagramas ============ */
+.blocks{display:grid; gap:2px; padding:10px; background:var(--sunk); border-radius:var(--r); border:1px solid var(--line)}
+.cell{aspect-ratio:1; border-radius:1px}
+.c-rock{background:#2B333B}
+.c-air{background:transparent; box-shadow:inset 0 0 0 1px var(--line-2)}
+.c-dig{background:var(--red-soft); box-shadow:inset 0 0 0 1px var(--red-line)}
+.c-lava{background:#B4501F}
+.c-water{background:#2E5F8C}
+.c-safe{background:var(--ok)}
+.c-item{background:var(--bone)}
+.c-none{background:transparent}
+.asciibox{
+  font:400 12.5px/1.55 var(--mono); background:#070A0C; color:var(--bone-dim);
+  padding:14px 15px; border-radius:var(--r); overflow-x:auto; white-space:pre;
+  -webkit-overflow-scrolling:touch; border:1px solid var(--line);
+}
+
+/* ============ checklist ============ */
+.chk{display:flex; align-items:flex-start; gap:12px; padding-top:13px; border-top:1px solid var(--line); cursor:pointer}
+.chk input{width:20px; height:20px; margin:2px 0 0; accent-color:var(--red); flex:0 0 auto; cursor:pointer}
+.chk span{font-size:15px; font-weight:600; color:var(--ink); line-height:1.35}
+.card.done{border-color:rgba(82,168,123,.45); background:var(--ok-soft)}
+.card.done .chk span{color:var(--ok)}
+.bar{height:6px; background:var(--sunk); overflow:hidden; border-radius:3px; border:1px solid var(--line)}
+.bar>i{display:block; height:100%; background:var(--red); transition:width .24s ease}
+.syncdot{display:inline-flex; align-items:center; gap:7px; font:400 12px/1 var(--mono); color:var(--muted); letter-spacing:.06em}
+.syncdot::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--faint)}
+.syncdot.live::before{background:var(--ok); box-shadow:0 0 0 3px rgba(82,168,123,.16)}
+
+footer{
+  margin-top:56px; padding-top:26px; border-top:1px solid var(--line);
+  color:var(--muted); font-size:14px; display:flex; flex-direction:column; gap:10px; line-height:1.55;
+}
+footer b{color:var(--ink-2)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none !important; animation:none !important}
+}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="mark">
+      <span class="glyph" aria-hidden="true">ME</span>
+      <b>Minezin Emo</b>
+      <i>Bedrock 1.26.45</i>
+    </div>
+    <span class="livechip">No ar</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="rail" aria-label="Seções do guia">
+    <div class="rail-scroll" id="railScroll"></div>
+  </nav>
+  <main id="main"></main>
+</div>
+<script>
+/* =====================================================================
+   MINEZIN EMO — companheiro do servidor
+   Coordenadas: medidas com /locate na propria 1.26.45, seed 2684991254.
+   O console roda o locate a partir da origem 0,0 — as distancias sao
+   contadas dali, nao do spawn.
+   ===================================================================== */
+
+const MUNDO = {
+  seed: "2684991254",
+  nome: "MundoCerejeira",
+  versao: "1.26.45",
+  spawn: { x: -22, z: 94 },
+  desc: "cherry grove com lago cenico no spawn",
+  nota: 100
+};
+
+const CONEXAO = {
+  principal: { host: "minezinemo.duckdns.org", porta: "19132" },
+  ip:        { host: "56.126.115.48", porta: "19132" }
+};
+
+const HOSPEDAGEM = {
+  onde: "AWS EC2 — São Paulo",
+  so: "Ubuntu 26.04 LTS",
+  quando: "24 horas por dia",
+  nota: "O servidor saiu do PC de casa e foi para a nuvem. Não depende mais de ninguém deixar o computador ligado, e não passa mais por túnel."
+};
+
+/* ---- biomas medidos (32) ---- */
+const BIOMAS = [
+  {id:"cherry_grove", nome:"Bosque de cerejeiras", x:-32, z:-32, dist:45, cat:"cenico"},
+  {id:"dripstone_caves", nome:"Cavernas de espeleotemas", x:-96, z:-32, dist:101, cat:"caverna"},
+  {id:"frozen_peaks", nome:"Picos congelados", x:-160, z:-32, dist:163, cat:"montanha"},
+  {id:"snowy_slopes", nome:"Encostas nevadas", x:-160, z:-96, dist:186, cat:"cenico"},
+  {id:"deep_dark", nome:"Escuridão profunda", x:-144, z:-144, dist:203, cat:"caverna"},
+  {id:"meadow", nome:"Prado", x:-224, z:-32, dist:226, cat:"cenico"},
+  {id:"plains", nome:"Planície", x:-160, z:-160, dist:226, cat:"comum"},
+  {id:"river", nome:"Rio", x:-96, z:-288, dist:303, cat:"comum"},
+  {id:"forest", nome:"Floresta", x:-288, z:-288, dist:407, cat:"comum"},
+  {id:"taiga", nome:"Taiga", x:-416, z:-352, dist:544, cat:"comum"},
+  {id:"beach", nome:"Praia", x:-96, z:-608, dist:615, cat:"comum"},
+  {id:"cold_ocean", nome:"Oceano frio", x:-160, z:-608, dist:628, cat:"oceano"},
+  {id:"birch_forest", nome:"Floresta de bétulas", x:-480, z:-480, dist:678, cat:"comum"},
+  {id:"lush_caves", nome:"Cavernas verdejantes", x:16, z:-912, dist:912, cat:"caverna"},
+  {id:"deep_cold_ocean", nome:"Oceano frio profundo", x:480, z:-992, dist:1102, cat:"oceano"},
+  {id:"ocean", nome:"Oceano", x:-1120, z:-1120, dist:1583, cat:"oceano"},
+  {id:"sunflower_plains", nome:"Planície de girassóis", x:-1184, z:-1248, dist:1720, cat:"cenico"},
+  {id:"jagged_peaks", nome:"Picos recortados", x:-1312, z:-1120, dist:1725, cat:"montanha"},
+  {id:"flower_forest", nome:"Floresta florida", x:-1248, z:-1248, dist:1764, cat:"cenico"},
+  {id:"deep_ocean", nome:"Oceano profundo", x:-992, z:-1504, dist:1801, cat:"oceano"},
+  {id:"grove", nome:"Bosque nevado", x:-1568, z:-1440, dist:2128, cat:"cenico"},
+  {id:"pale_garden", nome:"Jardim pálido", x:-1696, z:-1504, dist:2266, cat:"cenico"},
+  {id:"savanna", nome:"Savana", x:-1056, z:-2720, dist:2917, cat:"comum"},
+  {id:"lukewarm_ocean", nome:"Oceano morno", x:-2208, z:2080, dist:3033, cat:"oceano"},
+  {id:"savanna_plateau", nome:"Planalto de savana", x:-1376, z:-2848, dist:3162, cat:"comum"},
+  {id:"deep_lukewarm_ocean", nome:"Oceano morno profundo", x:-1824, z:-2848, dist:3382, cat:"oceano"},
+  {id:"stony_peaks", nome:"Picos pedregosos", x:608, z:-3360, dist:3414, cat:"montanha"},
+  {id:"mangrove_swamp", nome:"Manguezal", x:3040, z:1760, dist:3512, cat:"comum"},
+  {id:"desert", nome:"Deserto", x:-1312, z:-3552, dist:3786, cat:"comum"},
+  {id:"bamboo_jungle", nome:"Selva de bambu", x:-2144, z:-3936, dist:4482, cat:"recurso"},
+  {id:"jungle", nome:"Selva", x:-3040, z:-3680, dist:4773, cat:"comum"},
+  {id:"warm_ocean", nome:"Oceano quente", x:-3296, z:3744, dist:4988, cat:"oceano"}
+];
+
+/* ---- estruturas medidas (14) ---- */
+const ESTRUTURAS = [
+  {id:"ancient_city", nome:"Cidade antiga", x:-168, z:40, dist:172, porque:"Furtividade Veloz, discos e o Warden"},
+  {id:"mineshaft", nome:"Mina abandonada", x:-208, z:-112, dist:236, porque:"Trilhos, baús e teia"},
+  {id:"trial_chambers", nome:"Câmara de teste", x:185, z:311, dist:361, porque:"Maça, Densidade, Brecha e Rajada de Vento"},
+  {id:"buriedtreasure", nome:"Tesouro enterrado", x:280, z:-232, dist:363, porque:"Coração do mar"},
+  {id:"ruined_portal", nome:"Portal arruinado", x:200, z:344, dist:397, porque:"Obsidiana e ouro de graça"},
+  {id:"ruins", nome:"Ruínas oceânicas", x:440, z:-280, dist:521, porque:"Mapa de tesouro enterrado"},
+  {id:"village", nome:"Aldeia", x:-424, z:-376, dist:566, porque:"Villagers, camas e comércio"},
+  {id:"trail_ruins", nome:"Ruínas de trilha", x:-370, z:850, dist:927, porque:"Cacos de cerâmica e armor trims"},
+  {id:"shipwreck", nome:"Naufrágio", x:-136, z:-1144, dist:1152, porque:"Mapa de tesouro e loot inicial"},
+  {id:"stronghold", nome:"Fortaleza", x:1298, z:-270, dist:1325, porque:"Portal do End"},
+  {id:"monument", nome:"Monumento oceânico", x:-792, z:-1496, dist:1692, porque:"Prismarinho, esponja e guardians"},
+  {id:"mansion", nome:"Mansão da floresta", x:1752, z:-856, dist:1949, porque:"Totem da Imortalidade"},
+  {id:"pillager_outpost", nome:"Posto de saqueadores", x:1736, z:-1208, dist:2114, porque:"Começar raid e pegar bandeira"},
+  {id:"temple", nome:"Templo", x:2616, z:-2552, dist:3654, porque:"Loot e TNT da armadilha"}
+];
+
+const NAO_VARRIDO = "Nether e End não entram nessa lista: o comando roda a partir do Overworld e só enxerga o Overworld. Badlands, pântano, ice spikes, dark forest e algumas taigas antigas também não apareceram dentro do raio de busca — existem, mas estão longe o bastante para o servidor desistir de procurar.";
+
+/* ---- addons realmente instalados no mundo ---- */
+const ADDONS = [
+  {nome:"Bedrock Essentials+", ver:"1.8.3", tipo:"BP + RP", faz:"Vein miner (quebra o veio inteiro), tree capitator (derruba a árvore toda) e lanterna portátil.", estado:"ok"},
+  {nome:"Better Trades", ver:"1.1.6", tipo:"BP", faz:"Reequilibra as trocas de villager e do vendedor ambulante, deixando os preços menos absurdos.", estado:"ok"},
+  {nome:"Bedrock Chunk Visualizer", ver:"1.2.0", tipo:"BP + RP", faz:"Mostra as bordas de chunk em partículas, com menu próprio. Essencial para alinhar farm.", estado:"ok"},
+  {nome:"F3 Debug Screen", ver:"1.0.0", tipo:"BP + RP", faz:"Tela de debug estilo Java. No PC, tecla F8.", estado:"aviso"},
+  {nome:"Caverna Clara", ver:"1.0.0", tipo:"BP", faz:"Visão noturna automática quando há teto acima de você. Feito em casa, sem HUD e sem configurar.", estado:"ok"},
+  {nome:"Coordenadas de Morte", ver:"1.0.0", tipo:"BP", faz:"Escreve no chat onde você morreu, na hora e de novo ao renascer. Só texto: sem feixe de luz, sem marcador no mundo e sem item.", estado:"ok"}
+];
+
+const REGRAS = [
+  ["Modo de jogo","Sobrevivência","difficulty normal, 20 jogadores"],
+  ["Cheats","Desligados","allow-cheats=false"],
+  ["Lista de convidados","Aberta","allow-list=false, qualquer conta Xbox entra"],
+  ["Conta","Obrigatória","online-mode=true, precisa de conta Microsoft real"],
+  ["Distância de visão","24 chunks","view-distance=24"],
+  ["Coordenadas","Ligadas","showcoordinates"],
+  ["Contador de dias","Ligado","showdaysplayed"],
+  ["Phantoms","Desligados","doinsomnia=false, pode ficar sem dormir"],
+  ["Fogo alastra","Não","dofiretick=false"],
+  ["Cama no Nether","Não explode","respawnblocksexplode=false"],
+  ["Dormir","Metade da galera","playerssleepingpercentage=50"],
+  ["Mob griefing","Ligado","mobgriefing=true — de propósito: villager precisa para plantar"]
+];
+
+/* ---- minerios ---- */
+function M(nome,y,risco,custo,quando,passos,pros,contras,dia){return{nome,y,risco,custo,quando,passos,pros,contras,dia};}
+
+const MINERIOS = [
+  {
+    id:"carvao", nome:"Carvão", dim:"Overworld", cor:"#3A3B42", ferramenta:"Madeira ou melhor",
+    pico:"Y 96", alt:"Y 136+ em montanha", faixa:"Y 0 a 320", bioma:"Montanha ajuda muito",
+    resumo:"O pico real de geração é Y 96, mas encosta de montanha rende mais por minuto: a pedra já está exposta e você não gasta tempo cavando.",
+    tags:["início","tocha","montanha","combustível"],
+    perfis:[
+      ["Mais rápido","Encosta acima de Y 136, raspando pedra exposta."],
+      ["Mais seguro","Caverna rasa durante o dia, sem descer fundo."],
+      ["Sem montanha perto","Carvão vegetal: queime tora no forno e resolva o combustível."]
+    ],
+    metodos:[
+      M("Encosta de montanha","Y 136+","baixo","baixo","Método padrão para carvão em massa.",
+        ["Vá para os Picos congelados a 163 blocos ou as Encostas nevadas a 186.","Suba acima de Y 136 e raspe o carvão visível na pedra exposta.","Faça cortes horizontais curtos em vez de um túnel fundo.","Converta parte em tocha ali mesmo para não lotar o inventário."],
+        ["Quase não exige preparo","Muito carvão por minuto","Quase nenhuma lava"],
+        ["Depende de relevo alto","Rende pouco em floresta sem pedra exposta"],"montanha"),
+      M("Caving raso oportunista","Y 64 a 120","médio","baixo","Bom no início, enquanto você procura ferro e comida.",
+        ["Entre só em caverna rasa e larga.","Pegue o carvão exposto nas paredes e volte antes de se perder.","Não force caverna profunda só por carvão: o rendimento cai."],
+        ["Rápido no começo","Combina com ferro raso","Não precisa cavar muito"],
+        ["Mobs","Menos previsível que montanha"],"caverna"),
+      M("Carvão vegetal","Superfície","baixo","baixo","Melhor alternativa quando não há montanha por perto.",
+        ["Corte árvores perto da base.","Queime as toras no forno para virar carvão vegetal.","Use como combustível e tocha até achar montanha."],
+        ["Independe da seed","Seguro","Resolve emergência"],
+        ["Não dá XP de mineração","Consome madeira"],"superficie")
+    ]
+  },
+  {
+    id:"ferro", nome:"Ferro", dim:"Overworld", cor:"#9A7350", ferramenta:"Pedra ou melhor",
+    pico:"Y 16", alt:"Y 232 em montanha", faixa:"Y -64 a 320", bioma:"Montanha ajuda",
+    resumo:"Tem dois picos: Y 16 para o começo estável, e Y 232 em montanha alta para volume. Veio gigante em tuff no fundo é o achado que dá stacks.",
+    tags:["ferro","montanha","veio gigante","tuff"],
+    perfis:[
+      ["Começo de jogo","Túnel em Y 16. Estável e não exige equipamento forte."],
+      ["Muito ferro","Montanha alta perto de Y 232, ou veio gigante com tuff."],
+      ["Já está no fundo","Aproveite o ferro que aparecer, mas não desça só por ele."]
+    ],
+    metodos:[
+      M("Branch mining estável","Y 16","baixo","baixo","Melhor para ferro cedo e previsível.",
+        ["Desça de escada até Y 16.","Faça um corredor 1x2 e galhos laterais a cada 3 blocos.","Pegue ferro, carvão e o que aparecer sem entrar no deepslate pesado.","Volte quando o inventário encher, não quando as picaretas quebrarem."],
+        ["Consistente","Pouco risco de lava","Funciona em qualquer bioma"],
+        ["Não é o maior rendimento possível","Fica repetitivo"],"branch"),
+      M("Montanha alta","Y 200 a 232","baixo","baixo","Quando você achou pico com muita pedra exposta.",
+        ["Suba os Picos congelados (163 blocos) acima de Y 200.","Raspe as paredes de pedra.","Faça cortes horizontais curtos e volte à superfície para se orientar."],
+        ["Pode superar mina subterrânea","Rende carvão e esmeralda junto","Pouco deepslate"],
+        ["Depende do relevo","Risco de queda e neve fofa"],"montanha"),
+      M("Veio gigante com tuff","Y -60 a -8","médio","baixo","Ótimo quando encontrado por acaso em caverna profunda.",
+        ["Se achar tuff misturado com ferro bruto, não abandone.","Siga o tuff em todas as direções, com cuidado.","Use Fortuna se tiver e marque o caminho de volta."],
+        ["Rendimento enorme","Pode dar stacks","Vale muito no meio do jogo"],
+        ["Difícil de localizar","Mais mobs e lava no fundo"],"veio")
+    ]
+  },
+  {
+    id:"cobre", nome:"Cobre", dim:"Overworld", cor:"#A85F38", ferramenta:"Pedra ou melhor",
+    pico:"Y 48", alt:"Dripstone Caves", faixa:"Y -16 a 112", bioma:"Cavernas de espeleotemas",
+    resumo:"Dripstone Caves em Y 48 é o melhor pacote. E temos uma a 101 blocos do spawn — mais perto que qualquer outra coisa do mundo.",
+    tags:["cobre","dripstone","raio","veio gigante"],
+    perfis:[
+      ["Mais rápido","Dripstone Caves a 101 blocos, entre Y 40 e 60."],
+      ["Consistente","Túnel em Y 48 se preferir não entrar em caverna."],
+      ["Volume grande","Siga veio gigante de cobre em granito entre Y 0 e 50."]
+    ],
+    metodos:[
+      M("Dripstone Caves","Y 40 a 60","médio","baixo","Melhor método geral para cobre, e é logo ali.",
+        ["Vá para X -96 / Z -32, a 101 blocos da origem.","Desça até a faixa Y 40 a 60.","Pegue os veios expostos, que são enormes nesse bioma.","Leve balde de água: espeleotema no teto cai e mata."],
+        ["Muito mais cobre por minuto","Poupa picareta","Combina com exploração"],
+        ["Espeleotema caindo","Caverna confusa"],"caverna"),
+      M("Branch mining em Y 48","Y 48","baixo","baixo","Plano B confiável perto da base.",
+        ["Cave até Y 48.","Corredor 1x2 com galhos laterais.","Use Fortuna: cobre bruto multiplica muito bem."],
+        ["Funciona em qualquer lugar","Seguro","Rota simples"],
+        ["Menos rendimento que dripstone","Lento sem Fortuna"],"branch"),
+      M("Veio gigante de granito","Y 0 a 50","médio","baixo","Quando aparecer granito com cobre em quantidade anormal.",
+        ["Ao achar, cave ao redor do granito.","Siga a direção do veio em vez de voltar ao túnel principal.","Leve shulker ou baú: enche rápido."],
+        ["Pode render absurdo","Ótimo para construção","Aproveita achado raro"],
+        ["Não é previsível","Lota o inventário"],"veio")
+    ]
+  },
+  {
+    id:"ouro", nome:"Ouro", dim:"Overworld", cor:"#A8892C", ferramenta:"Ferro ou melhor",
+    pico:"Y -16", alt:"Badlands acima de Y 32", faixa:"Y -64 a 32", bioma:"Badlands é bônus",
+    resumo:"Y -16 é o pico normal. Badlands dá muito mais, mas nesta seed o servidor não achou badlands no raio de busca — então aqui é Y -16 mesmo, ou ouro do Nether.",
+    tags:["ouro","piglin","barganha","maçã dourada"],
+    perfis:[
+      ["Consistente","Branch mining em Y -16."],
+      ["Para barganha","Ouro do Nether rende mais rápido, mas em pepitas."],
+      ["Aproveitamento","Pegue o ouro que aparecer na mina de diamante."]
+    ],
+    metodos:[
+      M("Branch mining em Y -16","Y -16","médio","baixo","Melhor caminho nesta seed, já que não há badlands perto.",
+        ["Desça até Y -16.","Corredor 1x2 e galhos.","Leve picareta de ferro ou melhor.","Aproveite redstone e lápis que aparecerem."],
+        ["Consistente","Funciona em qualquer bioma","Rende outros minérios junto"],
+        ["Deepslate atrasa","Mais lava que camada alta"],"branch"),
+      M("Ouro do Nether","Y 15 a 114","médio","baixo","Quando o objetivo é barganhar com piglin, não blocos de ouro.",
+        ["Equipe uma peça de armadura de ouro antes de entrar.","Quebre o ouro fora do campo de visão dos piglins.","Use Fortuna para pepitas, ou Toque Suave para fundir depois."],
+        ["Muito fácil de achar","Combina com a rota de netherite","Bom para barganha"],
+        ["Piglin fica agressivo","Rende pepita, não barra"],"nether")
+    ]
+  },
+  {
+    id:"redstone", nome:"Redstone", dim:"Overworld", cor:"#A33329", ferramenta:"Ferro ou melhor",
+    pico:"Y -59", alt:"Y -53 para menos lava", faixa:"Y -64 a 15", bioma:"Qualquer",
+    resumo:"Mesma mina do diamante. Quanto mais fundo, melhor, mas Y -53 reduz muito o estresse de lava por um custo pequeno de rendimento.",
+    tags:["redstone","diamante","deepslate"],
+    perfis:[
+      ["Mais rendimento","Y -59, junto com o diamante."],
+      ["Menos lava","Y -53, perdendo um pouco do pico."],
+      ["Rápido","Caverna profunda abaixo de Y -32, se já achou uma boa."]
+    ],
+    metodos:[
+      M("Branch junto com diamante","Y -59","médio","baixo","Método padrão: dois minérios importantes na mesma viagem.",
+        ["Desça até Y -59.","Corredor 1x2 e galhos espaçados de 3 em 3.","Leve água, blocos e comida.","Pegue redstone e diamante no mesmo trajeto."],
+        ["Rende dois minérios de uma vez","Consistente","Bom para longo prazo"],
+        ["Deepslate é lento","Lava frequente"],"branch"),
+      M("Camada segura","Y -53","baixo","baixo","Para quem quer sessão longa sem interrupção.",
+        ["Cave na faixa Y -53.","Mesma malha de branch mining.","Use quando morrer para lava doeria mais que perder rendimento."],
+        ["Bem menos lava","Mais confortável","Bom para sessão longa"],
+        ["Pico menor","Ainda é deepslate"],"seguro")
+    ]
+  },
+  {
+    id:"lapis", nome:"Lápis-lazúli", dim:"Overworld", cor:"#3A5580", ferramenta:"Pedra ou melhor",
+    pico:"Y 0", alt:"Y -4 a 8", faixa:"Y -64 a 64", bioma:"Qualquer",
+    resumo:"Y 0 é o alvo. Com Fortuna, dois ou três veios já resolvem uma temporada inteira de encantamento — não vire isso numa mega-mina.",
+    tags:["lápis","encantamento","Y 0"],
+    perfis:[
+      ["Encantamento cedo","Túnel curto em Y 0."],
+      ["Consistente","Galhos até achar 1 a 3 veios."],
+      ["Não exagere","Poucos veios com Fortuna já bastam."]
+    ],
+    metodos:[
+      M("Branch curto em Y 0","Y 0","baixo","baixo","Método controlado, com objetivo claro.",
+        ["Desça até Y 0.","Faça um corredor principal curto.","Abra galhos até achar 1 a 3 veios.","Use Fortuna e pare quando tiver o suficiente."],
+        ["Consistente","Seguro","Resolve encantamento rápido"],
+        ["Não serve para diamante","Rende pouco sem Fortuna"],"branch"),
+      M("Caverna média","Y -16 a 32","médio","baixo","Bom se a caverna já está aberta no caminho.",
+        ["Explore caverna perto de Y 0.","Pegue o lápis exposto, mas não dependa só disso.","Marque a saída antes de entrar em ramificação."],
+        ["Poupa picareta","Pode achar ferro e ouro","Bom no começo"],
+        ["Mobs","Lápis nem sempre aparece exposto"],"caverna")
+    ]
+  },
+  {
+    id:"diamante", nome:"Diamante", dim:"Overworld", cor:"#2E7F8C", ferramenta:"Ferro ou melhor",
+    pico:"Y -59", alt:"Y -53 para menos lava", faixa:"Y -64 a 16", bioma:"Qualquer",
+    resumo:"Y -59 é o pico. Branch mining vence no longo prazo; caverna profunda vence no curto prazo quando a caverna é excelente. Diamante exposto ao ar gera menos, então parede fechada é melhor que céu aberto.",
+    tags:["diamante","poke holes","caverna profunda","Fortuna"],
+    perfis:[
+      ["Mais consistente","Branch ou poke-holes em Y -59."],
+      ["Menos estresse","Branch em Y -53, menos lava e menos bedrock."],
+      ["Curto prazo","Caving profundo, se já encontrou caverna abaixo de Y -30."]
+    ],
+    metodos:[
+      M("Branch mining otimizado","Y -59","médio","baixo","Método repetível padrão para diamante manual.",
+        ["Desça até Y -59.","Corredor 1x2.","Galhos laterais longos a cada 3 blocos.","Leve água, blocos, comida e marque a rota.","Use Fortuna III sempre que possível."],
+        ["Consistente","Independe de caverna","Rende redstone junto"],
+        ["Deepslate é lento","Lava frequente","Cansa"],"branch"),
+      M("Poke-holes 1x1","Y -59","médio","médio","Mais eficiente por bloco quebrado, se aceitar o incômodo.",
+        ["Faça um corredor principal.","Abra buracos laterais de 1 bloco em sequência.","Não cole os buracos: sobrepor área já vista é desperdício.","Cheque cada buraco antes de seguir."],
+        ["Expõe muitas faces por bloco quebrado","Bom rendimento manual","Gasta menos picareta"],
+        ["Claustrofóbico","Atenção redobrada com lava"],"poke"),
+      M("Camada segura","Y -53","baixo","baixo","Para quem odeia lava e quer jogar relaxado.",
+        ["Use Y -53.","Repita o mesmo padrão de branch mining.","Aceite rendimento menor em troca de menos susto."],
+        ["Bem menos lava","Confortável","Ótimo para casual"],
+        ["Menos diamante por hora","Ainda é fundo"],"seguro"),
+      M("Caving profundo","Abaixo de Y -30","alto","baixo","Vence no curto prazo quando a caverna é muito boa.",
+        ["Entre com escudo, comida, blocos e água.","Ilumine ou bloqueie as rotas antes de minerar.","Procure parede profunda e piso perto de lava.","Saia quando o risco aumentar."],
+        ["Pode render rápido","Poupa picareta","Acha minério variado"],
+        ["Muito variável","Mobs e lava","Minério exposto ao ar é reduzido"],"caverna"),
+      M("Beacon com Eficiência V","Y -59","baixo","alto","Conforto de fim de jogo.",
+        ["Monte beacon com Pressa II.","Use Eficiência V com Inquebrável e Remendo.","Abra áreas grandes ou faça branch rápido.","Lembre que deepslate não vira instamine universal."],
+        ["Muito confortável","Previsível","Ótimo para sessão longa"],
+        ["Preparo caro","Desnecessário no começo"],"beacon")
+    ]
+  },
+  {
+    id:"esmeralda", nome:"Esmeralda", dim:"Overworld", cor:"#3D7A52", ferramenta:"Ferro ou melhor",
+    pico:"Y 236", alt:"Y 180+ em montanha", faixa:"Y -16 a 320", bioma:"Só montanha",
+    resumo:"Não faça branch genérico atrás de esmeralda. Ela só gera em bioma de montanha, e quanto mais alto melhor. Na prática, trocar com villager rende muito mais.",
+    tags:["esmeralda","picos","villager","moeda"],
+    perfis:[
+      ["Minerar de verdade","Picos congelados a 163 blocos, acima de Y 200."],
+      ["Mais prático","Trocar com villager quase sempre ganha em quantidade."],
+      ["Exploração","Raspar pedra exposta em encosta alta enquanto passa."]
+    ],
+    metodos:[
+      M("Picos altos","Y 200 a 256","médio","baixo","O método correto para o minério em si.",
+        ["Vá aos Picos congelados (X -160 / Z -32) ou aos Picos recortados.","Suba acima de Y 200.","Raspe pedra exposta e faça cortes horizontais curtos.","Use Fortuna para multiplicar o pouco que aparecer."],
+        ["É o método certo para o minério","Rende ferro e carvão junto","Pouco deepslate"],
+        ["Depende de bioma e altura","Raro por natureza"],"montanha"),
+      M("Trocar com villager","Aldeia","baixo","baixo","Melhor caminho para ter muitas esmeraldas, embora não seja mineração.",
+        ["Monte um trading hall: fazendeiro, flecheiro, bibliotecário.","Fazendeiro compra abóbora e melancia; flecheiro compra graveto.","Use mineração só se você quer o bloco de esmeralda em si."],
+        ["Muito mais eficiente","Seguro","Escala bem"],
+        ["Não é mineração","Exige villagers"],"aldeia")
+    ]
+  },
+  {
+    id:"quartzo", nome:"Quartzo do Nether", dim:"Nether", cor:"#B5A894", ferramenta:"Qualquer picareta",
+    pico:"Exposto na parede", alt:"Y 10 a 117", faixa:"Y 10 a 117", bioma:"Qualquer Nether",
+    resumo:"Para XP e quartzo, pegue o que está exposto na parede. É o minério mais fácil do jogo — o risco é só não se perder atrás dele.",
+    tags:["quartzo","XP","construção"],
+    perfis:[
+      ["XP rápido","Quartzo exposto nas paredes do Nether."],
+      ["Seguro","Minerar só perto do túnel marcado."],
+      ["Construção","Fortuna para item, Toque Suave se quiser o bloco de minério."]
+    ],
+    metodos:[
+      M("Catação exposta","Qualquer Y","médio","baixo","Melhor para XP rápido.",
+        ["Ande por paredes seguras perto do portal ou do túnel.","Quebre o quartzo exposto.","Bloqueie a lava na hora se abrir bolsão."],
+        ["Muito XP","Quase nenhuma escavação","Fácil de achar"],
+        ["Risco de lava","Fácil se perder"],"nether"),
+      M("Túnel controlado","Y 16 a 80","baixo","baixo","Mais seguro quando você não quer perder o inventário.",
+        ["Faça corredor 1x2 marcado.","Abra janelas laterais pequenas.","Nunca mine o teto sem ter bloco na mão para tampar lava."],
+        ["Seguro","Organizado","Combina com rota de viagem"],
+        ["Menos XP por minuto"],"branch")
+    ]
+  },
+  {
+    id:"debris", nome:"Detritos ancestrais", dim:"Nether", cor:"#6B534A", ferramenta:"Diamante ou netherite",
+    pico:"Y 15", alt:"Y 11 a 15", faixa:"Y 8 a 119", bioma:"Qualquer Nether",
+    resumo:"TNT é o mais rápido, cama é o mais barato, e cavar reto com Resistência ao Fogo é o mais seguro. Lembre que a armadura de netherite ainda precisa do molde, que só vem de bastião.",
+    tags:["netherite","TNT","cama","Resistência ao Fogo"],
+    perfis:[
+      ["Mais rápido","TNT em Y 15, se pólvora e areia não forem problema."],
+      ["Mais barato","Bed mining em Y 11 a 15."],
+      ["Mais seguro","Cavar reto com Eficiência e Resistência ao Fogo."]
+    ],
+    metodos:[
+      M("TNT manual","Y 15","médio","alto","Melhor rendimento manual quando você tem explosivo sobrando.",
+        ["Cave um túnel 1x2 em Y 15.","Coloque TNT espaçada ao longo do túnel.","Acenda de longe e recue.","Tampe a lava e recolha o debris exposto."],
+        ["Mais rápido","Revela muito netherrack de uma vez","Menos cliques"],
+        ["Caro","Cuidado com explosão e lava","Precisa de pólvora e areia"],"tnt"),
+      M("Bed mining","Y 11 a 15","alto","baixo","Melhor custo por velocidade sem farm de TNT.",
+        ["Faça um túnel em Y 15.","Abra um buraco à frente e coloque a cama no fundo.","Clique protegido atrás de um bloco.","Apague o fogo e cheque o debris.","Leve comida e armadura: a explosão machuca."],
+        ["Barato","Muito forte em sobrevivência solo","Não exige farm de creeper"],
+        ["Arriscado","Fogo e empurrão","Cansa rápido"],"cama"),
+      M("Cavar reto com segurança","Y 15","baixo","baixo","Mais previsível e menos caótico.",
+        ["Use picareta de diamante ou netherite com Eficiência.","Cave reto em Y 15.","Abra galhos ou janelas laterais curtas.","Beba Resistência ao Fogo para reduzir o risco de lava."],
+        ["Seguro","Barato","Bom quando você não pode perder o inventário"],
+        ["Mais lento que TNT","Gasta durabilidade"],"branch")
+    ]
+  }
+];
+
+/* =====================================================================
+   ENCANTAMENTOS
+   Cada um traz o nome em ingles junto, porque muita gente joga com o
+   jogo em ingles e porque os nomes em portugues variam entre versoes.
+   ===================================================================== */
+function E(nome,en,max,cats,onde,faz,como,conflito,fonte){return{nome,en,max,cats,onde,faz,como,conflito,fonte};}
+
+const ENCANTAMENTOS = [
+  E("Proteção","Protection","IV",["armadura"],"Capacete, peitoral, calças e botas",
+    "Reduz quase todo tipo de dano: combate, queda, projétil, fogo e explosão.",
+    "É a escolha padrão do set do dia a dia. Perde para a proteção específica contra o tipo certo de dano, mas ganha em versatilidade — e você raramente sabe de antemão como vai morrer.",
+    "Não convive na mesma peça com Proteção contra Fogo, Explosões ou Projéteis.","Mesa, livro, loot e bibliotecário."),
+  E("Proteção contra Fogo","Fire Protection","IV",["armadura"],"Qualquer peça",
+    "Reduz dano de fogo e lava, e encurta o tempo queimando.",
+    "Vale muito no Nether e na mineração perto de lava. Não substitui a poção de Resistência ao Fogo: a poção zera o dano, o encantamento só reduz.",
+    "Não convive com Proteção, Proteção contra Explosões ou Projéteis.","Mesa, livro, loot e bibliotecário."),
+  E("Proteção contra Explosões","Blast Protection","IV",["armadura"],"Qualquer peça",
+    "Reduz dano e empurrão de explosão.",
+    "Serve contra creeper, TNT, ghast, cama usada no Nether e cristal do End. Se você morre muito para creeper, é a especialização certa.",
+    "Não convive com Proteção, Proteção contra Fogo ou Projéteis.","Mesa, livro, loot e bibliotecário."),
+  E("Proteção contra Projéteis","Projectile Protection","IV",["armadura"],"Qualquer peça",
+    "Reduz dano de flecha, tridente arremessado e tiro de shulker.",
+    "Excelente para raid, esqueleto, piglin com besta e cidade do End. No uso geral costuma perder para Proteção.",
+    "Não convive com Proteção, Proteção contra Fogo ou Explosões.","Mesa, livro, loot e bibliotecário."),
+  E("Queda Suave","Feather Falling","IV",["armadura"],"Só botas",
+    "Reduz muito o dano de queda, inclusive o do teleporte por pérola.",
+    "É um dos encantamentos mais importantes do jogo e não conflita com nenhuma proteção. Salva em mineração vertical, no End, na Elytra e em caverna grande.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Respiração","Respiration","III",["armadura"],"Só capacete",
+    "Aumenta o tempo debaixo d'água e reduz a chance de dano por afogamento.",
+    "Cada nível melhora bastante monumento, naufrágio e construção submersa. Combina com Afinidade Aquática.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Afinidade Aquática","Aqua Affinity","I",["armadura"],"Só capacete",
+    "Tira a penalidade pesada de minerar debaixo d'água.",
+    "Não acelera nada em terra firme. Continua valendo a penalidade de estar boiando sem chão firme sob os pés.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Espinhos","Thorns","III",["armadura"],"Qualquer peça",
+    "Tem chance de devolver dano em quem bate em você.",
+    "Quanto mais peças com Espinhos, maior a chance. Gasta durabilidade extra, então praticamente exige Inquebrável e Remendo junto.",
+    "Sem conflito, mas aumenta o desgaste.","Mesa, livro, loot e bibliotecário."),
+  E("Passos Profundos","Depth Strider","III",["armadura"],"Só botas",
+    "Aumenta a velocidade andando dentro da água.",
+    "No nível III você anda quase como em terra seca. É a escolha prática para exploração geral.",
+    "Não convive com Passos Gelados.","Mesa, livro, loot e bibliotecário."),
+  E("Passos Gelados","Frost Walker","II",["armadura","tesouro"],"Só botas",
+    "Congela a água em gelo temporário sob seus pés.",
+    "Encantamento de tesouro: não sai da mesa. Atravessa oceano sem barco, mas atrapalha farm e base com água.",
+    "Não convive com Passos Profundos.","Tesouro: loot, pesca e bibliotecário."),
+  E("Velocidade das Almas","Soul Speed","III",["armadura","tesouro"],"Só botas",
+    "Aumenta a velocidade sobre areia das almas e terra das almas.",
+    "Ótimo para estrada no Nether. Consome durabilidade por bloco percorrido, então Inquebrável e Remendo são quase obrigatórios.",
+    "Sem conflito.","Tesouro do Nether: barganha com piglin e baú de bastião."),
+  E("Furtividade Veloz","Swift Sneak","III",["armadura","tesouro"],"Só calças",
+    "Aumenta a velocidade enquanto você anda agachado.",
+    "Muito útil na Cidade antiga, em ponte no Nether e no End, e para construir em altura. No nível III agachar deixa de ser sofrimento.",
+    "Sem conflito.","Só em baú de Cidade antiga — a nossa fica a 172 blocos."),
+  E("Inquebrável","Unbreaking","III",["armadura","ferramenta","arma","distancia","tridente"],"Quase tudo que tem durabilidade",
+    "Dá chance de não gastar durabilidade a cada uso.",
+    "Universalmente forte. Em ferramenta multiplica a vida útil, em armadura reduz o desgaste ao tomar dano, e na Elytra é praticamente obrigatório.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Remendo","Mending","I",["armadura","ferramenta","arma","distancia","tridente","tesouro"],"Quase todo item com durabilidade",
+    "Usa o XP que você coleta para reparar o item equipado ou na mão.",
+    "É o encantamento central do equipamento permanente. Se vários itens com Remendo estão elegíveis, o XP escolhe um deles; quando tudo está cheio, o XP vai para a sua barra.",
+    "No arco, não convive com Infinito.","Tesouro: bibliotecário, pesca, loot e raid."),
+  E("Maldição do Vínculo","Curse of Binding","I",["armadura","maldicao"],"Armadura, cabeça, abóbora e Elytra",
+    "Impede tirar a peça no modo sobrevivência.",
+    "Só sai quando o item quebra ou você morre. É pegadinha, não melhoria.",
+    "Sem conflito técnico.","Tesouro e loot."),
+  E("Maldição do Desaparecimento","Curse of Vanishing","I",["armadura","ferramenta","arma","distancia","maldicao"],"Itens com durabilidade",
+    "Faz o item sumir quando você morre.",
+    "Não muda nada em combate ou mineração. Só serve se você quer impedir que outra pessoa recupere o item.",
+    "Sem conflito técnico.","Tesouro e loot."),
+  E("Afiação","Sharpness","V",["arma"],"Espada, machado e maça",
+    "Aumenta o dano corpo a corpo contra quase todo mob.",
+    "Escolha geral para espada e machado. Na maça compete com Densidade, que costuma render mais no golpe de queda.",
+    "Não convive com Julgamento, Ruína dos Artrópodes, Densidade ou Brecha.","Mesa, livro, loot e bibliotecário."),
+  E("Julgamento","Smite","V",["arma"],"Espada, machado e maça",
+    "Aumenta muito o dano contra mortos-vivos.",
+    "Vale contra zumbi, esqueleto, afogado, esqueleto wither, phantom e o próprio Wither. É a espada certa para farm de mob e para o chefe.",
+    "Não convive com Afiação, Ruína dos Artrópodes, Densidade ou Brecha.","Mesa, livro, loot e bibliotecário."),
+  E("Ruína dos Artrópodes","Bane of Arthropods","V",["arma"],"Espada, machado e maça",
+    "Aumenta o dano contra aranha, silverfish, endermite e abelha, e aplica lentidão.",
+    "Muito situacional. Bom para farm de aranha e pouco mais que isso.",
+    "Não convive com Afiação, Julgamento, Densidade ou Brecha.","Mesa, livro, loot e bibliotecário."),
+  E("Repulsão","Knockback","II",["arma"],"Espada",
+    "Empurra o inimigo para longe a cada golpe.",
+    "Ajuda a controlar creeper, mas atrapalha se você quer matar rápido ou juntar os drops num ponto só.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Aspecto Flamejante","Fire Aspect","II",["arma"],"Espada e maça",
+    "Incendeia o alvo por alguns segundos.",
+    "Cozinha o drop de animal e pressiona o inimigo. Ruim contra enderman, e a maioria dos mobs do Nether é imune a fogo.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Pilhagem","Looting","III",["arma"],"Só espada",
+    "Aumenta a quantidade e a chance dos drops de mob.",
+    "Essencial em farm manual: vara de blaze, pérola, pólvora, carne e drop raro. Só conta se a morte for atribuída a você segurando a espada.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Eficiência","Efficiency","V",["ferramenta"],"Picareta, pá, machado, enxada e tesoura",
+    "Aumenta a velocidade de quebrar o bloco certo para aquela ferramenta.",
+    "O ganho em nível alto é enorme. Com beacon de Pressa II, alguns blocos passam a quebrar instantaneamente — mas deepslate não vira instamine universal.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Toque Suave","Silk Touch","I",["ferramenta"],"Picareta, pá, machado e enxada",
+    "Faz o bloco cair como bloco, em vez de soltar o conteúdo.",
+    "Use para vidro, gelo, estante, coral, sculk e minério em bloco. Em minério, impede a Fortuna de multiplicar.",
+    "Não convive com Fortuna.","Mesa, livro, loot e bibliotecário."),
+  E("Fortuna","Fortune","III",["ferramenta"],"Picareta, pá, machado e enxada",
+    "Multiplica o que o bloco solta.",
+    "Diamante, carvão, redstone, lápis, esmeralda e quartzo rendem muito mais. Também ajuda em cascalho para sílex e em folhas para muda.",
+    "Não convive com Toque Suave.","Mesa, livro, loot e bibliotecário."),
+  E("Força","Power","V",["distancia"],"Só arco",
+    "Aumenta o dano da flecha.",
+    "É o dano principal do arco. No nível V o arco vira arma confiável para mob, dragão e exploração.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Impacto","Punch","II",["distancia"],"Só arco",
+    "Aumenta o empurrão da flecha.",
+    "Bom para manter distância, ruim se você quer acertar tiros seguidos ou juntar drop num ponto fixo.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Chama","Flame","I",["distancia"],"Só arco",
+    "As flechas saem em chamas.",
+    "Dá dano extra, cozinha drop de animal e acende fogueira e TNT à distância. Chuva apaga o fogo em quem está exposto.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Infinito","Infinity","I",["distancia"],"Só arco",
+    "Atira flecha comum sem gastar, desde que você tenha pelo menos uma no inventário.",
+    "Não funciona com flecha com efeito. É conveniência pura para exploração, mas custa o Remendo.",
+    "Não convive com Remendo.","Mesa, livro, loot e bibliotecário."),
+  E("Sorte do Mar","Luck of the Sea","III",["ferramenta"],"Vara de pesca",
+    "Aumenta a chance de tesouro na pesca e reduz o lixo.",
+    "Melhora livro encantado, sela e etiqueta. Funciona melhor pescando em água aberta de verdade.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Isca","Lure","III",["ferramenta"],"Vara de pesca",
+    "Reduz o tempo até fisgar.",
+    "Acelera a pescaria, mas não melhora a qualidade do que vem. Por isso anda junto com Sorte do Mar.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Lealdade","Loyalty","III",["tridente"],"Tridente",
+    "O tridente arremessado volta para a sua mão.",
+    "Quanto maior o nível, mais rápido volta. É o que torna o tridente utilizável como arma de arremesso sem medo de perder.",
+    "Não convive com Correnteza.","Mesa, livro, loot e bibliotecário."),
+  E("Empalamento","Impaling","V",["tridente"],"Tridente",
+    "Aumenta o dano contra alvo aquático ou em contato com água.",
+    "No Bedrock é forte demais: vale para qualquer alvo molhado, inclusive na chuva. Excelente em oceano e contra afogado.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Correnteza","Riptide","III",["tridente"],"Tridente",
+    "Arremessar o tridente lança você junto, se estiver na água ou na chuva.",
+    "É mobilidade, não arma de retorno. Ótimo com Elytra na chuva. Não funciona em lugar seco.",
+    "Não convive com Lealdade nem Canalização.","Mesa, livro, loot e bibliotecário."),
+  E("Canalização","Channeling","I",["tridente"],"Tridente",
+    "Invoca um raio no alvo atingido durante tempestade.",
+    "Precisa de céu aberto e trovoada. Serve para criar creeper carregado e para transformar villager em bruxa — e porco em piglin zumbificado, que é o que o raio faz de verdade.",
+    "Não convive com Correnteza.","Mesa, livro, loot e bibliotecário."),
+  E("Tiro Múltiplo","Multishot","I",["distancia"],"Besta",
+    "Dispara três projéteis gastando só um.",
+    "Bom contra grupo e ótimo com fogos de artifício. Só uma das flechas causa dano no mesmo alvo por disparo, e gasta mais durabilidade.",
+    "Não convive com Perfuração.","Mesa, livro, loot e bibliotecário."),
+  E("Carga Rápida","Quick Charge","III",["distancia"],"Besta",
+    "Reduz o tempo de recarga da besta.",
+    "No nível III a besta fica utilizável em combate contínuo. É praticamente obrigatório.",
+    "Sem conflito.","Mesa, livro, loot e bibliotecário."),
+  E("Perfuração","Piercing","IV",["distancia"],"Besta",
+    "A flecha atravessa alvos e pode ser recolhida depois.",
+    "Cada nível atravessa mais um alvo. Excelente em corredor e em farm, e ainda economiza flecha.",
+    "Não convive com Tiro Múltiplo.","Mesa, livro, loot e bibliotecário."),
+  E("Densidade","Density","V",["arma"],"Só maça",
+    "Aumenta o dano extra por bloco de queda no golpe da maça.",
+    "É o encantamento de dano principal da maça contra mob. Quanto mais alto você cai antes de acertar, maior o ganho.",
+    "Não convive com Afiação, Julgamento, Ruína dos Artrópodes ou Brecha.","Mesa, livro, loot e bibliotecário."),
+  E("Brecha","Breach","IV",["arma"],"Só maça",
+    "Ignora parte da redução de dano da armadura do alvo.",
+    "Útil contra alvo blindado. Contra mob comum, Densidade quase sempre rende mais dano na prática.",
+    "Não convive com Afiação, Julgamento, Ruína dos Artrópodes ou Densidade.","Mesa, livro, loot e bibliotecário."),
+  E("Rajada de Vento","Wind Burst","III",["arma","tesouro"],"Só maça",
+    "Depois de acertar o golpe de queda, joga você para cima.",
+    "Permite encadear golpes e ganhar altura. É raro e exige prática para não se lançar numa queda ruim.",
+    "Sem conflito, mas depende de acertar o golpe.","Tesouro: cofre ominoso da Câmara de teste — a nossa fica a 361 blocos.")
+];
+
+const REGRAS_BIGORNA = [
+  ["A regra de ouro","Não aplique seis livros um por um no item. Junte livro com livro em pares, depois par com par, e só então encoste o livro grande no equipamento."],
+  ["Por que isso funciona","Cada uso de bigorna aumenta a penalidade guardada no item. Ao combinar dois itens, o resultado herda a maior penalidade dos dois lados e ainda soma mais um uso. Mantendo o item final com poucos usos diretos, você não estoura o limite."],
+  ["A mesa é de graça","Encantar na mesa não conta como uso de bigorna. Se a mesa entregou uma base boa no item, comece por ela e economize livros."],
+  ["Livro já no nível máximo","Sempre que der, compre ou junte o livro já no nível final antes do plano. Subir Eficiência IV para V deve acontecer fora da árvore principal."],
+  ["Renomear custa","Renomear sozinho também adiciona um uso. Faça o nome junto com uma aplicação importante."],
+  ["Quando aparece caro demais","A penalidade ficou presa no item ou no livro. O rebolo limpa, mas apaga os encantamentos junto — por isso é melhor planejar a ordem do que consertar depois."]
+];
+
+function K(id,nome,cat,ideal,escolha,ordem,evite,nota){return{id,nome,cat,ideal,escolha,ordem,evite,nota};}
+
+const KITS = [
+  K("capacete","Capacete final","armadura",
+    ["Proteção IV","Inquebrável III","Remendo","Respiração III","Afinidade Aquática","Espinhos III (opcional)"],
+    "Proteção IV é o padrão. Só troque por Fogo, Explosões ou Projéteis se você quer montar um set especializado inteiro.",
+    ["Livro A: Proteção IV + Inquebrável III.","Livro B: Remendo + Respiração III.","Livro C (opcional): Afinidade Aquática + Espinhos III.","Junte A com B.","Aplique o resultado no capacete.","Se for usar C, aplique por último."],
+    "Não misture dois tipos de proteção. Pule Espinhos se quiser gastar menos durabilidade.",
+    "O capacete é a peça que mais encarece, porque acumula muitos encantamentos exclusivos dele. Vale montar os livros com calma antes de encostar no item."),
+  K("peitoral","Peitoral final","armadura",
+    ["Proteção IV","Inquebrável III","Remendo","Espinhos III (opcional)"],
+    "É a peça mais simples do set: poucos livros e custo bem controlado.",
+    ["Sem Espinhos: junte Proteção IV + Inquebrável III + Remendo num livro só e aplique.","Com Espinhos: Livro A = Proteção IV + Inquebrável III, Livro B = Remendo + Espinhos III, junte A com B e aplique uma vez."],
+    "Espinhos em todas as peças aumenta muito o desgaste do set inteiro.",
+    "Se a mesa já deu Proteção IV ou Inquebrável III no peitoral, use como base e complete só o que falta."),
+  K("calcas","Calças finais","armadura",
+    ["Proteção IV","Inquebrável III","Remendo","Furtividade Veloz III","Espinhos III (opcional)"],
+    "Furtividade Veloz vem só da Cidade antiga. Deixe entrar como livro pronto, não como uma corrente longa de bigorna.",
+    ["Livro A: Proteção IV + Inquebrável III.","Livro B: Remendo + Furtividade Veloz III.","Junte A com B.","Aplique nas calças.","Espinhos, se quiser, por último."],
+    "Não trave o set esperando Furtividade Veloz. Monte sem ela e complete depois.",
+    "A nossa Cidade antiga está a 172 blocos da origem, então esse livro é bem acessível neste mundo — mas leve lã e cuidado com o Warden."),
+  K("botas","Botas finais","armadura",
+    ["Proteção IV","Queda Suave IV","Passos Profundos III","Inquebrável III","Remendo","Velocidade das Almas III (opcional)"],
+    "Passos Profundos para uso geral. Passos Gelados é a alternativa e não convive com ele.",
+    ["Livro A: Proteção IV + Inquebrável III.","Livro B: Remendo + Queda Suave IV.","Livro C: Passos Profundos III + Velocidade das Almas III.","Junte A com B.","Junte o resultado com C.","Aplique nas botas."],
+    "Não junte Passos Profundos com Passos Gelados. Se o custo estourar, corte Velocidade das Almas primeiro.",
+    "As botas são a peça que mais estoura preço, porque acumulam encantamento exclusivo demais. Livros em pares fazem toda a diferença aqui."),
+  K("picareta-fortuna","Picareta de Fortuna","ferramenta",
+    ["Eficiência V","Fortuna III","Inquebrável III","Remendo"],
+    "Esta é a picareta do minério que solta item: diamante, carvão, redstone, lápis, esmeralda e quartzo.",
+    ["Livro A: Eficiência V + Fortuna III.","Livro B: Inquebrável III + Remendo.","Junte A com B.","Aplique numa picareta limpa ou numa já boa da mesa."],
+    "Fortuna não convive com Toque Suave. Não tente converter uma na outra depois.",
+    "Se a mesa entregar Eficiência IV ou V, use essa picareta como base e economize um livro inteiro."),
+  K("picareta-silk","Picareta de Toque Suave","ferramenta",
+    ["Eficiência V","Toque Suave","Inquebrável III","Remendo"],
+    "Esta é a picareta de vidro, gelo, estante, sculk e minério que você quer transportar como bloco.",
+    ["Livro A: Eficiência V + Toque Suave.","Livro B: Inquebrável III + Remendo.","Junte A com B.","Aplique na picareta."],
+    "Toque Suave não convive com Fortuna.",
+    "Tenha as duas picaretas. Tentar transformar uma na outra depois é desperdício de material e de níveis."),
+  K("pa","Pá final","ferramenta",
+    ["Eficiência V","Inquebrável III","Remendo","Toque Suave ou Fortuna III"],
+    "Toque Suave para grama, micélio e podzol. Fortuna para cascalho, quando você quer sílex.",
+    ["Livro A: Eficiência V + Inquebrável III.","Livro B: Remendo + Toque Suave ou Fortuna III.","Junte A com B.","Aplique na pá."],
+    "Escolha um dos dois. Não vale montar duas pás se você quase não usa pá especial.",
+    "Cuidado: Eficiência V numa pá quebra bloco rápido demais perto de construção delicada."),
+  K("machado","Machado final","ferramenta",
+    ["Eficiência V","Inquebrável III","Remendo","Afiação V (só no de combate)"],
+    "Machado de trabalho prioriza Eficiência. Machado de combate leva Afiação — e vale ser um item separado.",
+    ["Livro A: Eficiência V + Inquebrável III.","Livro B: Remendo (mais Toque Suave ou Fortuna, se quiser utilidade).","Junte A com B e aplique.","Para combate, monte um segundo machado com Afiação V."],
+    "Afiação, Julgamento e Ruína dos Artrópodes competem entre si.",
+    "Para cortar madeira o dano não importa. Um machado separado de combate evita custo alto à toa."),
+  K("espada","Espada final","arma",
+    ["Afiação V ou Julgamento V","Pilhagem III","Inquebrável III","Remendo","Aspecto Flamejante II (opcional)"],
+    "Afiação para uso geral. Julgamento se a sua rotina é farm de mob morto-vivo e o Wither.",
+    ["Livro A: Afiação V ou Julgamento V + Pilhagem III.","Livro B: Inquebrável III + Remendo.","Livro C (opcional): Aspecto Flamejante II.","Junte A com B.","Aplique na espada e deixe C por último."],
+    "Repulsão atrapalha farm manual: o mob voa para longe do ponto de coleta.",
+    "Para farm manual, Pilhagem III é prioridade alta. Aspecto Flamejante é gosto pessoal."),
+  K("maca","Maça final","arma",
+    ["Densidade V","Inquebrável III","Remendo","Rajada de Vento III (se achar)","Aspecto Flamejante II (opcional)"],
+    "Densidade é o padrão contra mob. Brecha é a alternativa contra alvo blindado — e as duas não convivem.",
+    ["Livro A: Densidade V + Inquebrável III.","Livro B: Remendo + Rajada de Vento III.","Junte A com B.","Aplique na maça."],
+    "Densidade, Brecha, Afiação, Julgamento e Ruína dos Artrópodes competem no mesmo item.",
+    "Rajada de Vento é raro. Monte a maça sem ela e complete depois — a Câmara de teste a 361 blocos é a fonte."),
+  K("arco-infinito","Arco com Infinito","distancia",
+    ["Força V","Infinito","Inquebrável III","Chama"],
+    "Mais cômodo para exploração: uma flecha no inventário já basta para atirar sem fim.",
+    ["Livro A: Força V + Infinito.","Livro B: Inquebrável III + Chama.","Junte A com B.","Aplique no arco."],
+    "Infinito não convive com Remendo. É um ou outro.",
+    "Este arco não se repara com XP. Em algum momento você vai repará-lo na bigorna ou trocar de arco."),
+  K("arco-remendo","Arco com Remendo","distancia",
+    ["Força V","Remendo","Inquebrável III","Chama"],
+    "Menos cômodo que Infinito, mas dura para sempre se você tem XP e flecha sobrando.",
+    ["Livro A: Força V + Remendo.","Livro B: Inquebrável III + Chama.","Junte A com B.","Aplique no arco."],
+    "Remendo não convive com Infinito.",
+    "É a escolha certa se você já tem farm de esqueleto ou usa flecha com efeito."),
+  K("besta","Besta final","distancia",
+    ["Carga Rápida III","Inquebrável III","Remendo","Perfuração IV ou Tiro Múltiplo"],
+    "Perfuração é melhor em corredor e ainda recupera flecha. Tiro Múltiplo é melhor contra grupo e com fogos.",
+    ["Livro A: Carga Rápida III + Inquebrável III.","Livro B: Remendo + Perfuração IV ou Tiro Múltiplo.","Junte A com B.","Aplique na besta."],
+    "Perfuração e Tiro Múltiplo não convivem.",
+    "Para foguete, Tiro Múltiplo é mais divertido. Para economia e corredor, Perfuração rende mais."),
+  K("tridente-lealdade","Tridente de Lealdade","distancia",
+    ["Lealdade III","Empalamento V","Canalização","Inquebrável III","Remendo"],
+    "Tridente de arremesso que volta. No Bedrock, Empalamento é forte demais na chuva e na água.",
+    ["Livro A: Lealdade III + Empalamento V.","Livro B: Inquebrável III + Remendo.","Livro C: Canalização.","Junte A com B, aplique, e deixe Canalização por último."],
+    "Lealdade e Canalização não convivem com Correnteza.",
+    "Faça este tridente separado do de mobilidade. Tentar juntar os dois papéis num item só não funciona."),
+  K("tridente-correnteza","Tridente de Correnteza","distancia",
+    ["Correnteza III","Empalamento V","Inquebrável III","Remendo"],
+    "Tridente de mobilidade para água e chuva. Com Elytra, vira transporte de verdade.",
+    ["Livro A: Correnteza III + Empalamento V.","Livro B: Inquebrável III + Remendo.","Junte A com B.","Aplique no tridente."],
+    "Correnteza não convive com Lealdade nem Canalização.",
+    "É item de locomoção. Para combate à distância, use o modelo de Lealdade."),
+  K("vara","Vara de pesca final","utilidade",
+    ["Sorte do Mar III","Isca III","Inquebrável III","Remendo"],
+    "Para pescaria longa atrás de livro, sela e etiqueta.",
+    ["Livro A: Sorte do Mar III + Isca III.","Livro B: Inquebrável III + Remendo.","Junte A com B.","Aplique na vara."],
+    "Sem conflito relevante.",
+    "É barata de montar e se paga com a própria pescaria."),
+  K("elytra","Elytra final","utilidade",
+    ["Inquebrável III","Remendo"],
+    "Kit obrigatório para voar sem destruir a Elytra.",
+    ["Junte Inquebrável III + Remendo num livro só.","Aplique na Elytra.","Se quiser renomear, faça na mesma operação."],
+    "Não existe outro encantamento útil para Elytra no jogo normal.",
+    "Com Remendo, pare de gastar membrana de phantom — e no nosso servidor phantom está desligado mesmo."),
+  K("escudo","Escudo final","utilidade",
+    ["Inquebrável III","Remendo"],
+    "Mantém o escudo vivo em raid, exploração e briga com creeper.",
+    ["Junte Inquebrável III + Remendo num livro só.","Aplique no escudo.","Renomeie junto, se quiser."],
+    "Sem conflito.",
+    "O escudo não precisa de mais nada para estar completo.")
+];
+
+/* =====================================================================
+   VILLAGERS
+   Precos base, antes de desconto por cura, reputacao, Heroi da Vila e
+   demanda. O nosso mundo roda o addon Better Trades, entao alguns
+   numeros ficam mais camaradas que o vanilla puro.
+   ===================================================================== */
+function V(id,nome,estacao,foco,nota,niveis){return{id,nome,estacao,foco,nota,niveis};}
+function N(nome,trocas){return{nome,trocas};}
+function T(paga,recebe,obs){return{paga,recebe,obs:obs||""};}
+
+const VILLAGERS = [
+  V("bibliotecario","Bibliotecário","Atril","Livros encantados, lanterna, bússola e etiqueta",
+    "É o villager mais importante do servidor. Antes da primeira troca, quebre e recoloque o atril para sortear outro livro. Depois que você comprar ou vender uma vez, a profissão e as ofertas travam de vez.",
+    [N("Novato",[T("24 papéis","1 esmeralda"),T("5 a 64 esmeraldas + 1 livro","1 livro encantado","O encantamento e o nível variam. Tesouro como Remendo pode aparecer aqui."),T("9 esmeraldas","1 estante")]),
+     N("Aprendiz",[T("4 livros","1 esmeralda"),T("1 esmeralda","1 lanterna"),T("5 a 64 esmeraldas + 1 livro","1 livro encantado")]),
+     N("Profissional",[T("5 sacos de tinta","1 esmeralda"),T("1 esmeralda","4 vidros"),T("5 a 64 esmeraldas + 1 livro","1 livro encantado")]),
+     N("Especialista",[T("1 livro escrito","1 esmeralda","O conteúdo do livro não importa."),T("4 esmeraldas","1 bússola"),T("5 a 64 esmeraldas + 1 livro","1 livro encantado")]),
+     N("Mestre",[T("20 esmeraldas","1 etiqueta"),T("5 a 64 esmeraldas + 1 livro","1 livro encantado","Quanto mais raro o encantamento, mais caro.")])]),
+  V("fazendeiro","Fazendeiro","Composteira","Comida, esmeralda por plantação e cenoura dourada",
+    "A profissão mais fácil de sustentar. Trigo, cenoura, batata, beterraba, abóbora e melancia viram esmeralda sem depender de mob nenhum.",
+    [N("Novato",[T("20 trigos","1 esmeralda"),T("26 batatas","1 esmeralda"),T("22 cenouras","1 esmeralda"),T("15 beterrabas","1 esmeralda"),T("1 esmeralda","6 pães")]),
+     N("Aprendiz",[T("6 abóboras","1 esmeralda"),T("1 esmeralda","4 tortas de abóbora"),T("1 esmeralda","4 maçãs")]),
+     N("Profissional",[T("4 melancias","1 esmeralda"),T("3 esmeraldas","18 biscoitos")]),
+     N("Especialista",[T("1 esmeralda","1 ensopado suspeito","O efeito depende da flor da tabela."),T("1 esmeralda","6 maçãs")]),
+     N("Mestre",[T("3 esmeraldas","3 cenouras douradas"),T("4 esmeraldas","3 melancias reluzentes")])]),
+  V("flecheiro","Flecheiro","Mesa de arquearia","Esmeralda fácil com graveto, arco e besta",
+    "A melhor porta de entrada da economia: 32 gravetos por 1 esmeralda é trivial com farm de árvore ou bambu.",
+    [N("Novato",[T("32 gravetos","1 esmeralda"),T("1 esmeralda","16 flechas"),T("1 esmeralda + 10 cascalhos","10 sílex")]),
+     N("Aprendiz",[T("26 sílex","1 esmeralda"),T("2 esmeraldas","1 arco"),T("14 fios","1 esmeralda")]),
+     N("Profissional",[T("24 penas","1 esmeralda"),T("3 esmeraldas","1 besta")]),
+     N("Especialista",[T("8 ganchos de armadilha","1 esmeralda"),T("7 a 21 esmeraldas","1 arco encantado")]),
+     N("Mestre",[T("8 a 22 esmeraldas","1 besta encantada"),T("2 esmeraldas + 5 flechas","5 flechas com efeito","O efeito varia por villager.")])]),
+  V("armeiro","Armeiro","Alto-forno","Armadura, escudo, sino e peças encantadas",
+    "É como conseguir armadura de diamante sem gastar diamante. Carvão, ferro, lava e diamante são as moedas que sobem o nível dele.",
+    [N("Novato",[T("15 carvões","1 esmeralda"),T("5 esmeraldas","1 capacete de ferro"),T("9 esmeraldas","1 peitoral de ferro"),T("7 esmeraldas","1 calças de ferro"),T("4 esmeraldas","1 botas de ferro")]),
+     N("Aprendiz",[T("4 lingotes de ferro","1 esmeralda"),T("36 esmeraldas","1 sino"),T("1 esmeralda","1 escudo")]),
+     N("Profissional",[T("1 balde de lava","1 esmeralda"),T("7 a 19 esmeraldas","1 peça de ferro encantada","A peça e o encantamento variam.")]),
+     N("Especialista",[T("1 diamante","1 esmeralda"),T("13 a 27 esmeraldas","1 calças de diamante encantadas"),T("13 a 27 esmeraldas","1 botas de diamante encantadas")]),
+     N("Mestre",[T("19 a 33 esmeraldas","1 capacete de diamante encantado"),T("21 a 35 esmeraldas","1 peitoral de diamante encantado")])]),
+  V("ferramenteiro","Ferramenteiro","Mesa de ferraria","Picareta, machado, pá e enxada de diamante",
+    "Torna ferramenta de diamante renovável. A picareta só aparece no nível Mestre, então é uma corrida longa.",
+    [N("Novato",[T("15 carvões","1 esmeralda"),T("1 esmeralda","1 machado de pedra"),T("1 esmeralda","1 pá de pedra"),T("1 esmeralda","1 picareta de pedra")]),
+     N("Aprendiz",[T("4 lingotes de ferro","1 esmeralda"),T("36 esmeraldas","1 sino")]),
+     N("Profissional",[T("30 pederneiras","1 esmeralda"),T("6 a 20 esmeraldas","1 ferramenta de ferro encantada")]),
+     N("Especialista",[T("1 diamante","1 esmeralda"),T("17 a 31 esmeraldas","1 machado de diamante encantado"),T("10 a 24 esmeraldas","1 pá de diamante encantada")]),
+     N("Mestre",[T("18 a 32 esmeraldas","1 picareta de diamante encantada")])]),
+  V("ferreiro","Ferreiro de armas","Rebolo","Espada e machado de diamante",
+    "Arma de diamante renovável. Compra ferro, carvão, pederneira e diamante para subir.",
+    [N("Novato",[T("15 carvões","1 esmeralda"),T("3 esmeraldas","1 machado de ferro"),T("7 a 21 esmeraldas","1 espada de ferro encantada")]),
+     N("Aprendiz",[T("4 lingotes de ferro","1 esmeralda"),T("36 esmeraldas","1 sino")]),
+     N("Profissional",[T("24 pederneiras","1 esmeralda")]),
+     N("Especialista",[T("1 diamante","1 esmeralda"),T("17 a 31 esmeraldas","1 machado de diamante encantado")]),
+     N("Mestre",[T("13 a 27 esmeraldas","1 espada de diamante encantada")])]),
+  V("clerigo","Clérigo","Suporte de poções","Redstone, lápis, glowstone e pérola do End",
+    "Transforma carne podre de farm de mob em esmeralda, e vende pérola — o que economiza caçar enderman à noite.",
+    [N("Novato",[T("32 carnes podres","1 esmeralda"),T("1 esmeralda","2 redstones")]),
+     N("Aprendiz",[T("3 lingotes de ouro","1 esmeralda"),T("1 esmeralda","1 lápis-lazúli")]),
+     N("Profissional",[T("2 pés de coelho","1 esmeralda"),T("4 esmeraldas","1 glowstone")]),
+     N("Especialista",[T("9 frascos de vidro","1 esmeralda"),T("5 esmeraldas","1 pérola do End")]),
+     N("Mestre",[T("22 verrugas do Nether","1 esmeralda"),T("3 esmeraldas","1 frasco de experiência")])]),
+  V("cartografo","Cartógrafo","Mesa de cartografia","Mapas de monumento e mansão",
+    "É o atalho para achar o Monumento oceânico e a Mansão sem sair vagando. Papel e vidro são moedas fáceis se você tem cana e areia.",
+    [N("Novato",[T("24 papéis","1 esmeralda"),T("7 esmeraldas","1 mapa vazio")]),
+     N("Aprendiz",[T("11 vidraças","1 esmeralda"),T("13 esmeraldas + bússola","1 mapa de monumento oceânico"),T("14 esmeraldas + bússola","1 mapa de mansão")]),
+     N("Profissional",[T("1 bússola","1 esmeralda"),T("7 esmeraldas","1 bandeira colorida")]),
+     N("Especialista",[T("3 esmeraldas","1 moldura"),T("7 esmeraldas","1 padrão de bandeira")]),
+     N("Mestre",[T("8 esmeraldas","1 padrão de bandeira raro")])]),
+  V("coureiro","Coureiro","Caldeirão","Couro, sela e armadura de cavalo",
+    "É a forma renovável de conseguir sela sem depender de baú de estrutura.",
+    [N("Novato",[T("6 couros","1 esmeralda"),T("3 esmeraldas","1 calças de couro tingidas")]),
+     N("Aprendiz",[T("26 pederneiras","1 esmeralda"),T("5 esmeraldas","1 capacete de couro tingido")]),
+     N("Profissional",[T("9 escamas de tartaruga","1 esmeralda"),T("7 esmeraldas","1 túnica de couro encantada")]),
+     N("Especialista",[T("4 esmeraldas","1 sela"),T("6 esmeraldas","1 armadura de couro para cavalo")]),
+     N("Mestre",[T("5 esmeraldas","1 capacete de couro encantado")])]),
+  V("pedreiro","Pedreiro","Cortador de pedras","Quartzo, terracota e blocos de construção",
+    "O melhor amigo de quem constrói: compra argila, pedra, granito, diorito e andesito, e vende quartzo e terracota.",
+    [N("Novato",[T("10 argilas","1 esmeralda"),T("1 esmeralda","10 tijolos")]),
+     N("Aprendiz",[T("20 pedras","1 esmeralda"),T("1 esmeralda","4 tijolos de pedra cinzelados")]),
+     N("Profissional",[T("16 granitos, dioritos ou andesitos","1 esmeralda"),T("1 esmeralda","4 terracotas coloridas")]),
+     N("Especialista",[T("12 quartzos do Nether","1 esmeralda"),T("1 esmeralda","1 terracota esmaltada")]),
+     N("Mestre",[T("1 esmeralda","1 bloco de quartzo"),T("1 esmeralda","1 pilar de quartzo")])]),
+  V("acougueiro","Açougueiro","Defumador","Comida pronta e venda de carne",
+    "Transforma farm de animal em esmeralda e resolve comida antes de você ter plantação grande.",
+    [N("Novato",[T("14 frangos crus","1 esmeralda"),T("7 carnes de porco cruas","1 esmeralda"),T("1 esmeralda","8 frangos assados")]),
+     N("Aprendiz",[T("15 carvões","1 esmeralda"),T("7 carnes bovinas cruas","1 esmeralda"),T("1 esmeralda","8 bifes")]),
+     N("Profissional",[T("10 carnes de coelho cruas","1 esmeralda"),T("7 carnes de carneiro cruas","1 esmeralda")]),
+     N("Especialista",[T("10 algas secas em bloco","1 esmeralda"),T("10 bagas doces","1 esmeralda")]),
+     N("Mestre",[T("20 esmeraldas","1 ensopado suspeito")])]),
+  V("pescador","Pescador","Barril","Peixe, fogueira, barco e vara encantada",
+    "Vale se você mora perto de água. Também compra carvão e fio, que sempre sobram.",
+    [N("Novato",[T("20 fios","1 esmeralda"),T("10 carvões","1 esmeralda"),T("6 bacalhaus crus","1 esmeralda")]),
+     N("Aprendiz",[T("1 esmeralda","6 bacalhaus cozidos"),T("2 esmeraldas","1 fogueira")]),
+     N("Profissional",[T("13 salmões crus","1 esmeralda"),T("1 esmeralda","6 salmões cozidos")]),
+     N("Especialista",[T("6 baiacus","1 esmeralda"),T("1 barco","1 esmeralda")]),
+     N("Mestre",[T("6 peixes tropicais","1 esmeralda"),T("7 a 22 esmeraldas","1 vara de pesca encantada")])]),
+  V("pastor","Pastor","Tear","Lã, corante, cama, bandeira e quadro",
+    "Bom para farm de lã e decoração. As cores das ofertas variam por villager.",
+    [N("Novato",[T("18 lãs brancas","1 esmeralda"),T("1 esmeralda","2 tesouras")]),
+     N("Aprendiz",[T("12 corantes","1 esmeralda"),T("1 esmeralda","12 lãs coloridas")]),
+     N("Profissional",[T("12 corantes de outra cor","1 esmeralda"),T("3 esmeraldas","1 cama colorida")]),
+     N("Especialista",[T("18 lãs coloridas","1 esmeralda"),T("3 esmeraldas","1 bandeira colorida")]),
+     N("Mestre",[T("2 esmeraldas","3 quadros"),T("3 esmeraldas","1 padrão de bandeira")])]),
+  V("ambulante","Vendedor ambulante","Nenhuma","Mudas, coral, flores e blocos de bioma distante",
+    "Não sobe de nível e não reabastece como os outros. Aparece sozinho com duas lhamas e some depois de um tempo. Vale pelo que ele traz de bioma que você ainda não visitou.",
+    [N("Ofertas típicas",[T("1 esmeralda","flores, sementes ou corante"),T("2 esmeraldas","muda, musgo, cipó ou espeleotema"),T("3 esmeraldas","balde de peixe tropical, coral ou slimeball"),T("5 a 6 esmeraldas","gelo compacto, podzol e outros blocos difíceis","A seleção muda a cada vendedor.")])]),
+  V("desempregado","Sem profissão e nitwit","Nenhuma","Sem trocas",
+    "Villager sem profissão pega qualquer estação livre. O nitwit (roupa verde, olho vazio) nunca pega profissão e nunca troca — reconheça antes de perder tempo com ele.",
+    [N("Sem ofertas",[T("Colocar uma estação de trabalho","A profissão correspondente","Só funciona se ele não for nitwit e conseguir alcançar a estação.")])])
+];
+
+const REGRAS_REROLL = [
+  ["Um de cada vez","Leve um villager adulto e sem profissão para uma cela isolada. Deixe só a bancada que ele deve pegar: no Bedrock, bancada vizinha pode ser reivindicada por engano e estragar o sorteio."],
+  ["Sorteie antes da primeira troca","Durante o horário de trabalho, coloque a bancada, espere as partículas e confira a oferta. Se não veio o que você quer, quebre a bancada, espere ele perder a profissão e recoloque. Repita à vontade."],
+  ["Trave quando acertar","Quando aparecer o item e o preço que você aceita, faça uma única compra ou venda. Depois dessa primeira troca, profissão e ofertas ficam travadas mesmo se a bancada sumir."],
+  ["Nível alto não dá para sortear","Armadura, ferramenta, arma, mapa e alguns itens só aparecem ao subir de nível. O Novato não revela esse resultado: você trava numa troca barata, sobe o villager, e se não vier, usa outro do breeder."],
+  ["Nem todo livro vem do atril","Velocidade das Almas, Furtividade Veloz e Rajada de Vento não entram no sorteio do bibliotecário. Eles vêm de loot específico: Nether, Cidade antiga e cofre ominoso."],
+  ["Preço muda depois","O preço-alvo dos cartões é o valor base. A demanda encarece temporariamente quando você esgota o estoque; cura de villager zumbi, reputação e Herói da Vila baratatam de forma permanente ou longa."]
+];
+
+function P(id,nome,prof,estacao,cat,prio,alvo,preco,nivel,modo,sorteio,trava,porque){
+  return {id,nome,prof,estacao,cat,prio,alvo,preco,nivel,modo,sorteio,trava,porque};
+}
+function LIV(id,ench,prio,preco,porque){
+  return P("liv-"+id, "Bibliotecário: "+ench, "Bibliotecário", "Atril", "livros", prio,
+    "Livro encantado de "+ench, preco, "Novato", "sorteio",
+    "Quebre e recoloque o atril até o livro sair já no nível indicado. Nível menor não vale: você paga bigorna extra depois para subir.",
+    "Compre o livro uma vez assim que aceitar encantamento e preço. Essa compra trava o bibliotecário para sempre.",
+    porque);
+}
+
+const CHECKLIST = [
+  LIV("mending","Remendo","essencial","10 a 38 esmeraldas + livro; ótimo até 16","Repara o equipamento com XP e é o que torna o set permanente."),
+  LIV("unbreaking","Inquebrável III","essencial","11 a 45; tente fechar em 18","Multiplica a vida útil de armadura, ferramenta, arma, escudo e Elytra."),
+  LIV("efficiency","Eficiência V","essencial","17 a 64; bom até 25","Fecha todas as ferramentas sem precisar juntar dois livros IV."),
+  LIV("fortune","Fortuna III","essencial","11 a 45; bom até 18","Multiplica diamante, carvão, redstone, lápis, esmeralda e quartzo."),
+  LIV("silk","Toque Suave","essencial","5 a 19; bom até 10","Necessário para vidro, gelo, sculk, estante e minério em bloco."),
+  LIV("protection","Proteção IV","essencial","14 a 58; bom até 20","É a proteção geral do set principal."),
+  LIV("feather","Queda Suave IV","essencial","14 a 58; bom até 20","Evita morte boba por queda e fecha as botas."),
+  LIV("sharpness","Afiação V","essencial","17 a 64; bom até 25","Melhor dano geral para a espada principal."),
+  LIV("looting","Pilhagem III","essencial","11 a 45; bom até 18","Aumenta drop em farm manual e em mob raro."),
+  LIV("power","Força V","alta","17 a 64; bom até 25","Fecha o dano do arco sem juntar livros menores."),
+  LIV("respiration","Respiração III","alta","11 a 45; bom até 18","Aumenta muito o tempo submerso, no capacete."),
+  LIV("aqua","Afinidade Aquática","alta","5 a 19; bom até 10","Tira a penalidade de minerar submerso."),
+  LIV("depth","Passos Profundos III","alta","11 a 45; bom até 18","Movimentação na água, nas botas de uso geral."),
+  LIV("smite","Julgamento V","alta","17 a 64; bom até 25","Espada especializada para farm de morto-vivo e para o Wither."),
+  LIV("infinity","Infinito","alta","5 a 19; bom até 10","Explorar atirando sem gastar flecha. Não convive com Remendo."),
+  LIV("loyalty","Lealdade III","alta","11 a 45; bom até 18","Faz o tridente voltar para a mão."),
+  LIV("impaling","Empalamento V","alta","17 a 64; bom até 25","Dano altíssimo do tridente no comportamento do Bedrock."),
+  LIV("quick","Carga Rápida III","alta","11 a 45; bom até 18","Deixa a besta utilizável em combate contínuo."),
+  LIV("thorns","Espinhos III","opcional","11 a 45; bom até 18","Set ofensivo. É opcional porque aumenta o desgaste da armadura."),
+  P("flecheiro-graveto","Flecheiro: esmeralda por graveto","Flecheiro","Mesa de arquearia","economia","essencial",
+    "32 gravetos por 1 esmeralda","Aceite 32; a demanda ajusta depois","Novato","sorteio",
+    "Se a compra de graveto não aparecer, quebre e recoloque a mesa antes de negociar.",
+    "Venda gravetos uma vez para travar, e depois suba para arco, besta e flecha.",
+    "É a troca inicial mais simples do jogo e é o que financia os bibliotecários."),
+  P("fazendeiro-raiz","Fazendeiro: cenoura ou batata","Fazendeiro","Composteira","economia","essencial",
+    "22 cenouras ou 26 batatas por 1 esmeralda","Prefira o que a sua farm já produz","Novato","sorteio",
+    "Sorteie a composteira até aparecer cenoura ou batata como compra de Novato.",
+    "Venda uma vez e suba até Mestre para liberar cenoura dourada.",
+    "Gera esmeralda cedo e ainda resolve a comida de exploração."),
+  P("fazendeiro-fruto","Fazendeiro: abóbora e melancia","Fazendeiro","Composteira","economia","essencial",
+    "6 abóboras ou 4 melancias por 1 esmeralda","Tente ter as duas compras","Aprendiz","nivel",
+    "O Novato não revela abóbora e melancia. Trave numa plantação barata e suba de nível.",
+    "Se faltar um dos dois, use outro fazendeiro do breeder em vez de insistir.",
+    "É a fonte de esmeralda mais estável do jogo: não depende de mob nenhum."),
+  P("clerigo","Clérigo: carne podre e pérola","Clérigo","Suporte de poções","economia","essencial",
+    "32 carnes podres por esmeralda; 5 esmeraldas por pérola","Aceite 32 carnes","Novato e Especialista","nivel",
+    "Garanta a carne podre no Novato, trave, e suba: a pérola só aparece no Especialista.",
+    "Deixe o suporte acessível para reabastecer redstone, lápis, glowstone e pérola.",
+    "Converte o lixo da farm de mob e evita caçar enderman de madrugada."),
+  P("armeiro-baixo","Armeiro: calças e botas de diamante","Armeiro","Alto-forno","equipamento","essencial",
+    "Calças e botas de diamante encantadas","13 a 27 esmeraldas por peça","Especialista","nivel",
+    "Não dá para sortear: trave em carvão ou ferro e suba até Especialista.",
+    "Se faltar uma das peças, preserve o estoque e suba um segundo armeiro.",
+    "Entrega metade do set de diamante sem você gastar um diamante sequer."),
+  P("armeiro-alto","Armeiro: capacete e peitoral","Armeiro","Alto-forno","equipamento","essencial",
+    "Capacete e peitoral de diamante encantados","Capacete 19 a 33; peitoral 21 a 35","Mestre","nivel",
+    "Suba um segundo armeiro até Mestre. O resultado final não pode ser sorteado.",
+    "Use o rebolo para limpar encantamento ruim e aplique os seus livros bons por cima.",
+    "Completa o set e ainda cria estoque de reposição."),
+  P("ferramenteiro-picareta","Ferramenteiro: picareta de diamante","Ferramenteiro","Mesa de ferraria","equipamento","essencial",
+    "Picareta de diamante encantada","18 a 32 esmeraldas","Mestre","nivel",
+    "Trave em carvão ou ferro e suba até Mestre. A picareta só aparece no fim.",
+    "Limpe o encantamento ruim no rebolo e aplique Fortuna ou Toque Suave.",
+    "Torna picareta de diamante renovável, que é o item que mais quebra."),
+  P("ferreiro","Ferreiro: espada e machado","Ferreiro de armas","Rebolo","equipamento","alta",
+    "Espada e machado de diamante encantados","Espada 13 a 27; machado 17 a 31","Especialista e Mestre","nivel",
+    "Trave em carvão ou ferro e suba. Arma de diamante só sai nos níveis altos.",
+    "Use o rebolo e aplique Afiação com Pilhagem, ou Julgamento.",
+    "Garante arma renovável e reserva para quando alguém morrer longe de casa."),
+  P("cartografo","Cartógrafo: mapa de monumento e mansão","Cartógrafo","Mesa de cartografia","exploracao","alta",
+    "Mapa de monumento oceânico e de mansão","13 a 14 esmeraldas + bússola","Aprendiz","nivel",
+    "Trave em papel no Novato e suba um nível para ver os mapas.",
+    "Compre cada mapa que interessa pelo menos uma vez.",
+    "Poupa exploração às cegas — embora aqui a gente já saiba onde os dois ficam."),
+  P("coureiro","Coureiro: sela","Coureiro","Caldeirão","exploracao","alta",
+    "Sela renovável","4 a 6 esmeraldas","Especialista","nivel",
+    "Trave em couro no Novato e suba: a sela só é confirmada nos níveis altos.",
+    "Se não aparecer, troque de coureiro em vez de insistir no mesmo.",
+    "Sela renovável para cavalo e para strider no Nether."),
+  P("pedreiro","Pedreiro: quartzo e terracota","Pedreiro","Cortador de pedras","economia","opcional",
+    "1 esmeralda por bloco de quartzo","1 esmeralda por bloco","Mestre","nivel",
+    "Comece com 10 argilas por esmeralda e suba até Mestre.",
+    "Se não vier o bloco que você quer, suba outro pedreiro.",
+    "Poupa viagem ao Nether quando a construção exige muito quartzo."),
+  P("pastor","Pastor: esmeralda por lã","Pastor","Tear","economia","opcional",
+    "18 lãs brancas por 1 esmeralda","Aceite 18","Novato","sorteio",
+    "Sorteie o tear se a compra de lã útil não aparecer.",
+    "Venda uma vez e só suba se quiser as opções de decoração.",
+    "Dá saída para farm automática de lã, que enche baú rápido."),
+  P("reserva","Villager reserva","Sem profissão","Nenhuma","exploracao","alta",
+    "Um adulto guardado, sem profissão","Sem troca: é contingência","Sem profissão","nenhum",
+    "Não negocie nada com ele e não deixe bancada solta por perto.",
+    "Mantenha em cela segura, com transporte pronto para levar onde precisar.",
+    "Substitui qualquer villager que morra ou qualquer profissão que saia errada.")
+];
+
+/* ---- pocoes ---- */
+function PO(nome,cats,base,ing,up,uso,como,cuidado){return{nome,cats,base,ing,up,uso,como,cuidado};}
+
+const POCOES = [
+  PO("Poção Estranha",["utilidade"],"Garrafa de água","Verruga do Nether","É a base de quase tudo.","Preparar qualquer poção útil.",
+    "Faça no suporte de poções com pó de blaze como combustível. Sem ela, a maioria dos ingredientes vira poção mundana e sem efeito.",
+    "Não adianta beber: é etapa intermediária, não poção final."),
+  PO("Resistência ao Fogo",["exploracao","combate"],"Poção Estranha","Creme de magma","Redstone aumenta a duração.","Nether, lava, blaze, bastião e mineração de netherite.",
+    "Zera o dano de fogo e lava enquanto está ativa. É a poção mais importante do servidor: é ela que impede você de perder o inventário inteiro num bolsão de lava.",
+    "Não protege contra queda, pancada nem explosão."),
+  PO("Cura Instantânea",["combate"],"Poção Estranha","Melancia reluzente","Glowstone sobe para Cura II; pólvora vira arremessável.","Recuperar vida no meio da briga.",
+    "Cura na hora. Na versão arremessável, cura você e os aliados — e machuca morto-vivo, o que é útil se souber usar.",
+    "Jogada no meio de zumbis e amigos ao mesmo tempo, faz as duas coisas de uma vez."),
+  PO("Regeneração",["combate"],"Poção Estranha","Lágrima de ghast","Redstone alonga; glowstone sobe para Regeneração II.","Luta longa: Wither, dragão e raid.",
+    "Devolve coração aos poucos. A versão II cura mais rápido mas dura menos; a versão longa é melhor para exploração.",
+    "Não segura dano em rajada. Combine com comida boa e armadura."),
+  PO("Força",["combate"],"Poção Estranha","Pó de blaze","Redstone alonga; glowstone sobe para Força II.","Aumentar o dano corpo a corpo.",
+    "Excelente com espada, machado e maça. A versão II é para briga curta; a longa vale mais para raid e bastião.",
+    "Não aumenta dano de arco nem de besta. É só corpo a corpo."),
+  PO("Velocidade",["exploracao"],"Poção Estranha","Açúcar","Redstone alonga; glowstone sobe para Velocidade II.","Explorar, fugir e transportar carga.",
+    "Aumenta a velocidade e o alcance do pulo horizontal. Ótima com gelo e no corredor do Nether.",
+    "Velocidade alta em ponte estreita derruba você. Agache."),
+  PO("Visão Noturna",["exploracao"],"Poção Estranha","Cenoura dourada","Redstone alonga.","Caverna, oceano e mineração.",
+    "Clareia tudo sem gastar tocha. Aqui no servidor o addon Caverna Clara já faz isso sob teto, então a poção vale mais para o mar e para superfície à noite.",
+    "Engana: você enxerga, mas o nível de luz real continua baixo e mob continua nascendo."),
+  PO("Respiração Aquática",["exploracao"],"Poção Estranha","Baiacu","Redstone alonga.","Monumento, naufrágio e construção submersa.",
+    "Impede perder as bolhas de ar. O nosso monumento fica a 1692 blocos, então essa poção é parte do preparo da viagem.",
+    "Não remove a lentidão de minerar na água. Isso é Afinidade Aquática, no capacete."),
+  PO("Queda Lenta",["exploracao","combate"],"Poção Estranha","Membrana de phantom","Redstone alonga.","End, Elytra, torre e maça.",
+    "Faz cair devagar e zera o dano de queda. Salva erro de Elytra e é o que permite usar a maça com segurança.",
+    "Atenção: phantom está desligado no nosso servidor, então a membrana só vem de comércio ou de baú."),
+  PO("Invisibilidade",["exploracao"],"Visão Noturna","Olho de aranha fermentado","Redstone alonga.","Passar por mob e explorar estrutura.",
+    "Funciona melhor sem armadura visível. Mob ainda percebe se você encostar, atacar ou chegar muito perto.",
+    "Armadura equipada continua aparecendo e derruba quase toda a vantagem."),
+  PO("Salto",["exploracao"],"Poção Estranha","Pé de coelho","Redstone alonga; glowstone aumenta a altura.","Subir terreno quebrado e construir.",
+    "Sobe a altura do pulo, o que ajuda muito nas montanhas perto do spawn.",
+    "Não substitui Queda Suave: você sobe mais e cai de mais alto."),
+  PO("Mestre Tartaruga",["combate"],"Poção Estranha","Casco de tartaruga","Redstone alonga; glowstone reforça os dois efeitos.","Segurar pancada em luta planejada.",
+    "Dá Resistência alta junto com Lentidão. É defesa extrema, para quando você já está posicionado.",
+    "A lentidão é séria. Não beba precisando fugir."),
+  PO("Fraqueza",["utilidade"],"Garrafa de água","Olho de aranha fermentado","Pólvora vira arremessável.","Curar villager zumbi e enfraquecer inimigo.",
+    "Para curar villager zumbi: jogue a versão arremessável nele e depois dê uma maçã dourada. O villager curado passa a vender com desconto permanente.",
+    "Prenda o villager zumbi antes. No sol ele queima, e solto ele foge."),
+  PO("Veneno",["negativa"],"Poção Estranha","Olho de aranha","Redstone alonga; glowstone sobe para Veneno II.","Enfraquecer alvo vivo.",
+    "Drena a vida até meio coração, mas nunca mata sozinho.",
+    "Morto-vivo é imune. Contra eles, use Dano Instantâneo."),
+  PO("Dano Instantâneo",["negativa","combate"],"Cura ou Veneno","Olho de aranha fermentado","Glowstone sobe para Dano II.","Dano mágico imediato.",
+    "Machuca o vivo na hora e cura o morto-vivo. Quase sempre usada na versão arremessável.",
+    "Contra zumbi, esqueleto e Wither você acaba curando o alvo."),
+  PO("Lentidão",["negativa"],"Velocidade ou Salto","Olho de aranha fermentado","Redstone alonga.","Segurar inimigo.",
+    "Funciona melhor arremessada num corredor ou em raid.",
+    "Não impede quem ataca à distância de continuar atirando.")
+];
+
+/* ---- farms ---- */
+function F(id,nome,cats,prio,dif,rende,resumo,construir,dicas,cuidado,materiais){
+  return{id,nome,cats,prio,dif,rende,resumo,construir,dicas,cuidado,materiais};
+}
+
+const FARMS = [
+  F("ferro","Farm de ferro",["inicio","villager"],"Muito alta","Média","Ferro, papoula e base para tudo",
+    "É a primeira farm grande que vale a pena. Ferro vira funil, trilho, bigorna, balde e praticamente todo mecanismo.",
+    ["Use villagers ligados a cama e estação, isolados de qualquer outro ponto de vila.","Controle a área onde o golem nasce e leve-o com água até lava ou fogueira.","Construa longe da aldeia e do trading hall para não misturar centros de vila."],
+    ["Prioridade máxima depois de estabilizar comida e villager.","Se parar de produzir, revise cama, profissão, acesso à estação e distância de outras camas.","Prefira desenho simples: o servidor tem view-distance 24 e farm pesada custa caro."],
+    "O problema mais comum é juntar sem querer com outra vila. Uma cama esquecida perto da farm desloca o centro e mata o rendimento.",
+    [["Villagers","10 a 20, já ligados a cama e estação."],["Camas","20 é o padrão dos desenhos grandes."],["Estações","10 a 20 composteiras ou mesas de arquearia."],["Blocos","6 a 12 stacks para plataforma e isolamento."],["Água","2 a 8 baldes para empurrar o golem."],["Lava ou fogueira","1 lava com placa, ou 4 a 8 fogueiras."],["Funis e baús","4 a 12 funis e 2 a 4 baús."]]),
+  F("villager","Breeder de villagers",["inicio","villager"],"Muito alta","Fácil","Villagers para o trading hall e para a farm de ferro",
+    "É a infraestrutura por trás de todo o resto: livro, ferro, esmeralda e reposição saem daqui.",
+    ["Use camas extras, comida e um caminho controlado para o bebê sair.","Separe o breeder do trading hall e da farm de ferro.","Transporte por barco, trilho ou canal de água."],
+    ["Cenoura, batata e pão alimentam a reprodução.","Ilumine bem e proteja de zumbi: villager morto é progresso perdido.","Guarde um adulto sem profissão como reserva."],
+    "Se ficar perto demais de outras camas e estações, as profissões embaralham e as duas farms param.",
+    [["Villagers iniciais","2 é o mínimo."],["Camas","3 ou mais; camas extras liberam bebê."],["Comida","Várias stacks de pão, cenoura ou batata."],["Proteção","Vidro, blocos sólidos e porta contra zumbi."],["Transporte","Barco, trilho ou canal de água."]]),
+  F("xp","Farm de XP",["inicio","xp"],"Muito alta","Fácil a média","XP para reparar e encantar",
+    "Sem XP você não sustenta Remendo nem fecha os kits. Vale ter uma simples cedo e uma forte depois do End.",
+    ["Escolha o método pela sua fase: spawner se achou dungeon, torre de mob se não achou, enderman depois do End.","Garanta área de coleta segura e descarte do que não interessa.","Coloque baú suficiente para não entupir."],
+    ["Se a sua armadura tem Remendo, equipe a peça certa antes de coletar o XP.","Spawner é estável mas rende menos que farm de fim de jogo.","Mob cap e distância de AFK mudam tudo no rendimento."],
+    "Farm baseada em bug muda a cada atualização. Prefira desenho recente e sem truque frágil, porque aqui a versão é atualizada.",
+    [["Blocos","4 a 10 stacks conforme o desenho."],["Baús e funis","2 a 8 baús e 4 a 16 funis."],["Água","2 a 8 baldes."],["Laje, alçapão ou botão","1 a 3 stacks para controlar spawn."],["Espada com Pilhagem","Opcional, melhora o drop."]]),
+  F("abobora","Farm de abóbora e melancia",["inicio","villager","redstone"],"Alta","Fácil","Esmeralda limpa com fazendeiro",
+    "A melhor base de economia do jogo: não depende de mob, escala bem e pesa pouco no servidor.",
+    ["Plante o caule com um bloco livre ao lado, onde o fruto nasce.","Use pistão para quebrar o fruto e carrinho com funil para coletar.","Tenha fazendeiros comprando abóbora e melancia."],
+    ["Ótima aqui porque pesa pouco: dá para deixar rodando sem travar o servidor.","Comece pequena e replique o módulo.","Combine com o trading hall e você fecha o ciclo da esmeralda."],
+    "Não deixe o pistão quebrar o caule. O fruto nasce ao lado, não no bloco do caule.",
+    [["Sementes","Abóbora e melancia."],["Terra e água","Enxada, água e luz para manter o caule."],["Pistões","1 por ponto onde o fruto nasce."],["Observadores","Para detectar o fruto."],["Redstone","Pó e repetidor."],["Coleta","Carrinho com funil é o mais comum."]]),
+  F("cana","Farm de cana e bambu",["inicio","redstone"],"Alta","Fácil","Papel, foguete, andaime e combustível",
+    "Cana sustenta bibliotecário e foguete; bambu sustenta andaime e combustível. Uma das primeiras coisas a automatizar.",
+    ["Observador olhando a altura onde a planta cresce, pistão quebrando o bloco.","Cana precisa de água ao lado; bambu aceita mais tipos de bloco.","Colete com água, funil ou carrinho."],
+    ["Faça cedo, mesmo pequena.","Papel vira esmeralda com bibliotecário e cartógrafo.","Bambu com andaime acelera muito construção em altura."],
+    "Confira se o observador está detectando a altura certa e se o item não fica preso no bloco.",
+    [["Cana ou bambu","Pelo menos 1 para plantar."],["Base","Terra ou areia para cana; terra ou grama para bambu."],["Água","Obrigatória ao lado da cana."],["Pistões","1 por coluna ou módulo."],["Observadores","1 por linha de detecção."],["Coleta","Água com funil, ou carrinho com funil."]]),
+  F("creeper","Farm de creeper",["redstone","endgame"],"Alta","Média","Pólvora para foguete, TNT e poção arremessável",
+    "Vira essencial no momento em que você pega a Elytra: sem pólvora não há foguete.",
+    ["Faça no oceano ou numa área com spawn bloqueado ao redor, para reduzir concorrência.","Use alçapão, botão ou gato para filtrar só creeper.","Deixe a plataforma de AFK na distância correta."],
+    ["Quanto melhor o bloqueio de spawn em volta, maior o rendimento.","Foguete de nível 1 já basta para voar de Elytra.","Desenhos recentes sem gato costumam ser mais simples de manter."],
+    "Se aparecer esqueleto e zumbi, o filtro de altura ou os alçapões estão errados.",
+    [["Blocos","10 a 25 stacks para plataforma e teto."],["Alçapões ou botões","Várias stacks para bloquear mob alto."],["Água","Baldes para conduzir o creeper."],["Funis e baús","8 a 24 funis e baú grande."],["Plataforma de AFK","Na distância certa de spawn."]]),
+  F("ouro","Farm de ouro e XP",["nether","xp","endgame"],"Alta","Média a alta","Ouro, XP, carne podre e espada",
+    "Sustenta barganha com piglin, maçã dourada, trilho energizado e XP de uma vez só.",
+    ["Construa isolado no Nether, longe de outras áreas de spawn.","Controle a coleta com funil e evite que o piglin escape.","Se o desenho pede morte pelo jogador, leve espada com Pilhagem."],
+    ["Faça depois de ter armadura boa e Resistência ao Fogo.","Gera muito item inútil: monte filtro para espada e carne.","Combina com barganha para virar recurso variado."],
+    "Não construa perto de portal ligado à base sem entender o spawn: piglin escapa e vira problema em casa.",
+    [["Blocos","8 a 20 stacks para plataforma e funil de queda."],["Alçapão e laje","1 a 4 stacks para controlar spawn."],["Funis e baús","16 ou mais funis: o drop é volumoso."],["Filtro","Comparador, repetidor, funil e item filler."],["Resistência ao Fogo","Muito recomendada durante a obra."]]),
+  F("blaze","Farm de blaze",["nether","xp"],"Alta","Média","Vara de blaze, pó de blaze e XP",
+    "Vara de blaze é obrigatória para poção e para o olho do End. Se achar o spawner na fortaleza, vale transformar em farm.",
+    ["Isole o spawner sem quebrar por acidente.","Use bloco não inflamável e lembre que água não funciona no Nether.","Crie um ponto de dano seguro para finalizar o blaze."],
+    ["Leve Resistência ao Fogo para construir.","O spawner sozinho já abastece o suporte de poções por muito tempo.","É a melhor fonte de XP antes do End."],
+    "Blaze voa e atira. Um buraco mal fechado vira incêndio e morte rápida.",
+    [["Spawner","Não quebre: a farm depende dele."],["Blocos não inflamáveis","Pedra, deepslate ou tijolo do Nether."],["Resistência ao Fogo","Praticamente obrigatória na obra."],["Espada","Pilhagem ajuda muito na vara."],["Baús e funis","Para vara e drop."]]),
+  F("raid","Farm de raid",["villager","endgame"],"Alta","Alta","Totem, esmeralda, redstone e glowstone",
+    "É a farm que muda a sua segurança: totem no bolso significa que morrer deixa de ser catástrofe.",
+    ["Use o Posto de saqueadores a 2114 blocos para começar o ciclo.","Isole villager e cama com muito cuidado.","Controle onde o raider nasce e onde ele morre."],
+    ["Construa só depois de ter equipamento bom: testar raid mal isolada é perigoso.","O totem muda completamente a exploração do Nether e do End.","Prepare armazenamento grande: o drop é muito variado."],
+    "Raid mal isolada mata o villager e quebra tudo. Teste primeiro com item barato.",
+    [["Villager e cama","1 villager protegido e 1 cama bem posicionada."],["Ponto de raid","Capitão do posto de saqueadores."],["Blocos","10 a 30 stacks."],["Água, lava ou fogueira","Para mover e finalizar o raider."],["Funis e baús","Muitos: esmeralda, totem, redstone, glowstone e sela."],["Armadura e totem","Para testar sem morrer."]]),
+  F("slime","Farm de slime",["redstone"],"Média","Média a alta","Slimeball para pistão grudento e lead",
+    "Necessária para redstone séria. Pistão grudento é o gargalo de quase toda máquina.",
+    ["Descubra o slime chunk, ou use pântano em fase de lua adequada.","Cave as plataformas e ilumine toda caverna em volta.","Use golem de ferro ou neve para atrair, e magma ou lava para matar."],
+    ["O rendimento depende quase inteiramente do bloqueio de spawn ao redor.","Faça quando já tiver picareta boa; beacon ajuda muito na escavação.","Sem slimeball você trava em qualquer máquina com pistão grudento."],
+    "Se as cavernas próximas estão escuras, elas roubam o mob cap e a farm parece quebrada sem estar.",
+    [["Slime chunk ou pântano","Escolha o local antes de cavar."],["Picareta boa","Você vai cavar muito."],["Blocos","Lajes ou blocos para as camadas de spawn."],["Iluminação","Para bloquear spawn concorrente."],["Golem ou neve","Para atrair o slime."],["Funis e baús","Para o slimeball."]]),
+  F("ossos","Farm de farinha de osso",["inicio","redstone"],"Média","Fácil","Farinha de osso e combustível",
+    "Acelera árvore, plantação, flor e musgo. Alga ainda vira combustível de forno.",
+    ["Use crescimento de alga com pistão e observador, ou compostagem automática.","Direcione o item para composteira com funil.","Guarde o excedente para árvore e decoração."],
+    ["Boa para automatizar madeira e plantação.","Também é a forma prática de farmar corante pela flor.","Alga seca em bloco é combustível barato e renovável."],
+    "Desenho antigo quebra com atualização. Prefira vídeo recente para Bedrock, porque o servidor está na 1.26.45.",
+    [["Item compostável","Alga, semente, musgo ou excedente."],["Composteiras","1 por linha pequena."],["Funis","Entrada por cima, saída por baixo."],["Baús","Um de entrada e um de saída."],["Pistões e observadores","Se a fonte for alga ou bambu."]]),
+  F("guardian","Farm de guardian",["xp","endgame"],"Média","Alta","Prismarinho, lanterna do mar e XP",
+    "Farm de construção e XP ligada ao Monumento oceânico — o nosso fica a 1692 blocos, a noroeste.",
+    ["Ache o monumento, mate os guardiões anciões e decida se vai drenar ou usar desenho sem drenar.","Controle os pontos de spawn dos guardians.","Leve Respiração Aquática, Visão Noturna e leite."],
+    ["Vale mais no meio e no fim do jogo.","Prismarinho e lanterna do mar são dos melhores blocos de construção do jogo.","Sem drenar é bem mais acessível; drenada rende mais."],
+    "Fadiga de Mineração atrapalha tudo. Leve leite para limpar o efeito enquanto caça os anciões.",
+    [["Monumento","Achar e preparar antes de qualquer coisa."],["Poções","Respiração Aquática e Visão Noturna."],["Leite","Para tirar Fadiga de Mineração."],["Blocos","Muitas stacks para plataforma e funil."],["Esponja ou areia","Se for drenar."],["Arma e armadura boas","Guardian bate forte."]]),
+  F("tridente","Farm de afogado",["xp"],"Média","Média","Tridente, cobre, concha e ouro",
+    "Resolve o tridente para Lealdade e Correnteza, e ainda rende cobre e concha do mar.",
+    ["Use rio ou oceano e controle onde o afogado nasce.","Se quiser melhorar o drop, faça o golpe final ser seu.","Ilumine a área em volta para não competir por spawn."],
+    ["Pilhagem ajuda muito se o método permite matar na mão.","Tridente é drop raro: tenha paciência.","Fica muito mais fácil depois da Respiração Aquática."],
+    "Nem todo afogado dropa tridente — só os que nascem segurando um têm chance relevante.",
+    [["Área de água","Rio ou oceano adequado para spawn."],["Blocos","Plataforma, funil de queda e proteção."],["Água","Canais para mover o afogado."],["Funis e baús","Concha, cobre, ouro e carne podre."],["Espada com Pilhagem","Se o método permite matar na mão."]])
+];
+
+const MATERIAIS = [
+  ["Ferro","minerio","Muito alta","Farm de ferro","Mineração em Y 16, loot de estrutura e troca com armeiro.","É o gargalo de funil, trilho, bigorna, balde e mecanismo.","Assim que tiver villager e cama sobrando.","Centro de vila misturado, ou villager sem alcançar a estação.",["ferro"]],
+  ["XP","xp","Muito alta","Farm de XP","Blaze, enderman, guardian, ouro e spawner.","Sem XP não existe Remendo nem encantamento fechado.","Uma simples cedo, uma forte depois do End.","Mob cap, distância de AFK errada e coleta entupida.",["xp","blaze","guardian","ouro"]],
+  ["Esmeralda","comida","Muito alta","Farm de abóbora e melancia com fazendeiro","Raid, cana e papel, graveto com flecheiro.","Compra livro, ferramenta, armadura e bloco.","Junto com o trading hall.","Villager sem reabastecer, ou preço alto por demanda.",["abobora","raid","cana","ferro"]],
+  ["Villagers","villager","Muito alta","Breeder de villagers","Trazer de aldeia próxima — a nossa fica a 566 blocos.","É a base de livro, ferro, esmeralda e reposição.","Antes de montar o trading hall grande.","Cama e estação misturadas, e zumbi matando villager.",["villager"]],
+  ["Pólvora","redstone","Alta","Farm de creeper","Bruxa e ghast, mas em escala bem menor.","Foguete de Elytra, TNT e poção arremessável.","Obrigatória assim que pegar a Elytra.","Bloqueio de spawn ruim e mob errado na plataforma.",["creeper"]],
+  ["Ouro","nether","Alta","Farm de ouro","Mineração no Nether e bastião.","Barganha, maçã dourada, trilho energizado e cura de villager.","Depois de armadura boa e acesso seguro ao Nether.","Spawn concorrente e armazenamento sem filtro.",["ouro"]],
+  ["Vara de blaze","nether","Alta","Farm de blaze no spawner","Matar blaze na mão na fortaleza.","Poção, pó de blaze e olho do End.","Assim que achar a fortaleza do Nether.","Falta de Resistência ao Fogo e spawner mal isolado.",["blaze"]],
+  ["Totem","villager","Alta","Farm de raid","Matar evocador em mansão — a nossa fica a 1949 blocos.","Segurança extrema para Nether, End e Warden.","Depois de equipamento decente.","Villager morto e raid nascendo fora do funil.",["raid"]],
+  ["Papel","comida","Alta","Farm de cana","Cortar cana manual no rio a 303 blocos.","Bibliotecário, cartógrafo, mapa e foguete.","Pequena no começo, expandida depois.","Cana sem água ao lado, ou coleta perdendo item.",["cana"]],
+  ["Slimeball","redstone","Média","Farm de slime","Matar slime à noite no pântano.","Pistão grudento, bloco de slime e lead.","Quando começar redstone séria.","Chunk errado e caverna escura em volta.",["slime"]],
+  ["Prismarinho","construcao","Média","Farm de guardian","Minerar o monumento depois de limpar os anciões.","Bloco de construção raro e a melhor iluminação do jogo.","Meio e fim de jogo.","Fadiga de Mineração e monumento sem controle de spawn.",["guardian"]],
+  ["Farinha de osso","comida","Média","Farm de alga e composteira","Esqueleto, farm de mob e compostagem manual.","Acelera árvore, colheita, flor, musgo e decoração.","Antes das farms de madeira e de flor.","Desenho antigo quebrado, ou composteira sem fluxo de item.",["ossos"]],
+  ["Tridente","xp","Média","Farm de afogado","Caçar afogado na mão em rio e oceano.","Correnteza, Lealdade, Canalização e mobilidade na chuva.","Quando quiser explorar oceano ou voar na chuva.","Drop raro e morte sem Pilhagem.",["tridente"]],
+  ["Bambu","construcao","Média","Farm de bambu automática","Cortar bambuzal na mão — o mais perto fica a 4482 blocos.","Andaime, combustível e bloco de bambu.","Assim que trouxer a primeira muda.","Coleta sem funil deixa item preso.",["cana"]],
+  ["Comida boa","comida","Alta","Fazendeiro com plantação","Farm de animal e plantação manual.","Saturação estável evita morte boba longe de casa.","Desde o primeiro dia.","Sem villager e sem farm de animal protegida.",["abobora","villager"]]
+];
+
+/* ---- redstone ---- */
+function RC(nome,cats,papel,receita,uso,como,farms,erro){return{nome,cats,papel,receita,uso,como,farms,erro};}
+function RS(nome,cats,fim,desenho,chave,passos,onde,ajuste,erro){return{nome,cats,fim,desenho,chave,passos,onde,ajuste,erro};}
+
+const COMPONENTES = [
+  RC("Pó de redstone",["sinal"],"O fio","Minerado, ou drop de bruxa.","Leva o sinal pelo chão e liga um componente ao outro.",
+    "A força começa em 15 e cai 1 por bloco. Depois de 15 blocos o sinal morre, e é por isso que o repetidor existe. O pó também muda de formato conforme o que está ao lado, o que causa conexão que você não queria.",
+    "Liga pistão, lâmpada, trilho energizado, dispensador e porta.","Esquecer o limite de 15 blocos, ou deixar o fio encostar onde não devia."),
+  RC("Tocha de redstone",["sinal"],"Inversor e fonte","Graveto e pó de redstone.","Fica ligada até o bloco onde está presa receber energia — aí desliga.",
+    "É o inversor do jogo: entrada ligada vira saída desligada. Também alimenta o pó ao redor. Se piscar rápido demais, ela queima e para até você atualizar o bloco.",
+    "Porta invertida, filtro de item, trava e sinal que precisa começar ligado.","Colocar num clock rápido sem trava e queimar a tocha."),
+  RC("Repetidor",["sinal","tempo"],"Reforça, atrasa e dá direção","Pedra, 2 tochas de redstone e pó.","Devolve o sinal para força 15, força a direção e adiciona atraso.",
+    "Tem 4 posições de atraso. A lateral também trava outro repetidor, o que cria uma memória simples de um bit.",
+    "Linha longa, clock, atraso de pistão e sincronia de módulo.","Esquecer que ele só conduz para a frente. Virado errado, nada passa."),
+  RC("Comparador",["sinal","itens"],"Lê container e compara sinal","Pedra, 3 tochas de redstone e quartzo do Nether.","Lê quanto tem dentro de um container e compara ou subtrai sinais.",
+    "A entrada principal vem por trás; as laterais comparam ou subtraem. Lendo baú, funil, barril, composteira ou suporte de poções, ele gera sinal proporcional ao conteúdo. É o que torna filtro de item possível.",
+    "Filtro de item, detector de baú cheio, composteira automática, clock de funil e dropper automático.","Confundir o modo comparação com o de subtração — a luz da frente acesa indica subtração."),
+  RC("Observador",["tempo","farm"],"Sensor de mudança","Pedregulho, redstone e quartzo do Nether.","Detecta mudança no bloco à sua frente e solta um pulso curto atrás.",
+    "O rosto observa; o ponto vermelho é a saída. Detecta cana e bambu crescendo, bloco colocado ou quebrado, e várias outras atualizações.",
+    "Farm de cana, bambu, abóbora, melancia, e clock compacto.","Virar ao contrário. O rosto precisa olhar o bloco que muda."),
+  RC("Pistão",["farm"],"Empurra","Tábua, pedregulho, ferro e redstone.","Empurra bloco ou entidade em linha reta.",
+    "Empurra até 12 blocos, desde que todos sejam móveis. Não puxa. Obsidiana, baú, spawner e bedrock não se movem.",
+    "Colhe cana, bambu, melancia e abóbora, empurra mob e abre porta escondida.","Tentar empurrar mais de 12 blocos, ou um bloco imóvel."),
+  RC("Pistão grudento",["farm"],"Empurra e puxa","Pistão e slimeball.","Empurra e traz de volta o bloco grudado na frente.",
+    "É a base de porta, trava e máquina reversível. Puxa normalmente só o bloco imediatamente à frente.",
+    "Porta de farm, trava de água, elevador pequeno e alternador.","Achar que ele puxa uma fileira inteira de blocos."),
+  RC("Dispensador",["farm","itens"],"Usa o item","Pedregulho, arco e redstone.","Ativa o item que está dentro: joga água ou lava, atira flecha, usa farinha de osso.",
+    "É diferente do dropper: o dispensador executa a ação do item. Com balde de água, ele alterna entre colocar e recolher a cada pulso.",
+    "Lavagem de mob, farm com água temporizada, farm de plantação e defesa com flecha.","Usar dropper quando o que você precisava era dispensador."),
+  RC("Dropper",["itens"],"Cospe o item","Pedregulho e redstone.","Move ou solta o item, sem usar a ação especial dele.",
+    "Apontado para um container, transfere. Apontado para o ar, joga fora. Com clock, vira elevador de item.",
+    "Elevador de item, descarte automático e saída de farm.","Colocar balde de água esperando que ele derrame — isso é dispensador."),
+  RC("Funil",["itens"],"Coleta e transfere","5 lingotes de ferro e um baú.","Puxa o item de cima e empurra para onde aponta.",
+    "Tem direção: coleta item solto acima, puxa de container acima e empurra para o container apontado. Energizado por redstone, ele trava e para tudo.",
+    "Coleta de farm, filtro de item, forno automático e trading hall.","Não reparar para onde o funil aponta, ou energizar sem querer e travar a linha."),
+  RC("Trilho energizado",["itens"],"Acelera o carrinho","Ouro, graveto e redstone.","Acelera quando ligado, freia quando desligado.",
+    "É o que mantém o carrinho coletor rodando em circuito.","Coleta debaixo de plantação e descarregador de carrinho.","Poucos trilhos energizados na subida fazem o carrinho parar no meio."),
+  RC("Carrinho com funil",["itens"],"Coleta em movimento","Carrinho e funil.","Coleta item passando por baixo do bloco onde ele caiu.",
+    "Puxa item bem rápido e alcança o que caiu sobre bloco sólido, o que a água não faz.","Farm de abóbora, melancia, bambu, cana e cacto.","Esquecer de descarregar: cheio, ele para de coletar."),
+  RC("Bloco alvo",["sinal"],"Entrada por projétil","Fardo de feno e redstone.","Emite sinal quando acertado por flecha ou tridente.",
+    "Quanto mais perto do centro o acerto, mais forte o sinal.","Ativação remota, painel e farm manual com arco.","Esperar força 15 sempre: depende da mira."),
+  RC("Sensor de luz solar",["sinal","tempo"],"Sabe a hora","Vidro, quartzo e laje de madeira.","Emite sinal conforme a luz do dia, e pode ser invertido para a noite.",
+    "Clicar nele alterna entre modo dia e modo noite. Serve para automatizar o que só deve rodar num período.",
+    "Luz automática e farm que desliga sozinha.","Deixar coberto por bloco: a leitura cai e o horário sai errado."),
+  RC("Sensor sculk",["sinal"],"Ouve vibração","Encontrado na Escuridão profunda — a 203 blocos daqui.","Detecta passo, bloco quebrado e projétil como vibração.",
+    "Aciona redstone sem fio nenhum, mas é sensível demais a barulho. Lã bloqueia vibração e serve de isolamento.",
+    "Porta secreta, alarme e ativação sem fio.","Deixar perto de barulho constante e viver de alarme falso."),
+  RC("Composteira",["itens"],"Vira farinha de osso","Lajes de madeira.","Recebe item orgânico e enche em camadas até soltar farinha de osso.",
+    "Funil alimenta por cima e retira por baixo. Comparador lê o nível de enchimento.","Farm de alga, semente, musgo e excedente de plantação.","Usar item de chance baixa sem volume e achar que quebrou."),
+  RC("Lâmpada de redstone",["sinal"],"Mostra o estado","Glowstone e redstone.","Acende quando energizada.",
+    "Não é só enfeite: é a melhor ferramenta para descobrir onde o seu circuito parou.","Painel de status, alerta de baú cheio e depuração.","Tirar os indicadores cedo demais e depois não saber onde a farm travou.")
+];
+
+const SISTEMAS = [
+  RS("Observador com pistão para cana e bambu",["farm"],"Colhe sozinho quando a planta cresce até a altura marcada.",
+    ["  [O] observador olha o topo","  [P] pistão quebra o bloco","  [R] pó liga o pistão","  agua/funil coleta embaixo"],
+    "O = observador, P = pistão, R = pó de redstone.",
+    ["Plante a cana ao lado da água, ou o bambu em bloco válido.","Coloque o pistão mirando o segundo bloco da planta.","Coloque o observador olhando a altura que você quer detectar.","Leve o pulso do observador até o pistão.","Colete com água, funil ou carrinho."],
+    "Cana, bambu, cacto adaptado e módulo replicável de começo de mundo.",
+    "Para pesar menos no servidor, use módulos menores e observador só em alguns pontos.",
+    "Observador virado ao contrário, ou pistão quebrando a base da planta."),
+  RS("Filtro de item com funil",["itens"],"Separa um item específico e deixa o resto seguir.",
+    ["  baú de entrada","      |","  [funil de cima]","      |","  [funil filtro] <- comparador","      |","  baú do item filtrado"],
+    "No funil filtro: 41 unidades do item alvo mais 4 itens filler renomeados.",
+    ["Coloque o funil filtro apontando para o lado, nunca para baixo.","Dentro dele, ponha o item que quer filtrar e itens filler que nunca entram na farm.","Ponha o comparador lendo esse funil.","Quando entra item suficiente, a tocha destrava o funil de baixo.","O item alvo desce para o baú separado."],
+    "Separar ferro e papoula, pólvora, ouro e carne, e a saída de qualquer farm de mob.",
+    "Filler renomeado impede que item comum ocupe o slot errado. Faça uma fatia dessas por item filtrado.",
+    "Apontar o funil filtro para baixo: ele esvazia sozinho e o filtro para de funcionar."),
+  RS("Dropper automático",["itens","tempo"],"Dispara o item toda vez que entra algo no dropper.",
+    ["  [comparador] <- le o dropper","      |","  [repetidor] devolve o pulso","      |","  [dropper] -> saida"],
+    "Comparador lendo o dropper, repetidor devolvendo o sinal.",
+    ["Coloque o comparador lendo o dropper.","Leve o sinal por repetidor e pó de volta ao dropper.","Quando o item entra, o comparador liga e gera pulso.","O dropper cospe até esvaziar e para sozinho."],
+    "Descarte de lixo, elevador de item e compactador de drop.",
+    "Para descarte, aponte para lava ou cacto. Para transporte, aponte para outro dropper.",
+    "Sem o laço de volta, o dropper cospe uma vez só e trava com item dentro."),
+  RS("Clock de funil",["tempo","itens"],"Cria um temporizador ajustável e estável.",
+    ["  [funil A] <-> [funil B]","     |            |","  comparador   comparador","     \\          /","      alterna o estado"],
+    "Mais itens dentro dos funis significa intervalo mais longo.",
+    ["Coloque dois funis apontando um para o outro.","Ponha alguns itens: eles ficam indo e voltando.","Comparadores detectam de que lado está o item.","Pistão ou tocha alterna o estado.","Use a saída para ligar água, luz, pistão ou dispensador."],
+    "Lavagem de farm de mob, temporizador de plantação e ciclo longo.",
+    "Ajuste o tempo pela quantidade de itens. Poucos itens, ciclo curto.",
+    "Encher demais e criar um ciclo de minutos que você achou que era de segundos."),
+  RS("Dispensador de água que liga e desliga",["farm"],"Solta a água para empurrar mob ou item, e recolhe depois.",
+    ["  [dispensador com balde de agua]","      |  pulso 1: coloca","      |  pulso 2: recolhe","  canal -> queda -> funis"],
+    "Precisa de número par de pulsos para voltar ao estado inicial.",
+    ["Ponha um balde de água no dispensador.","Aponte para o canal ou plataforma.","Ligue a um botão, clock ou temporizador de funil.","Garanta que o segundo pulso recolha a água.","Leve mob e item até a queda ou os funis."],
+    "Farm de mob, de plantação e limpeza de plataforma.",
+    "Use repetidor para sincronizar várias linhas de dispensador ao mesmo tempo.",
+    "Pulso ímpar deixa a água aberta e alaga a farm inteira."),
+  RS("Coleta com água e funis",["itens","farm"],"Leva o drop até um ponto central, sem gastar redstone.",
+    ["  agua empurra 8 blocos","  |||||||| -> [funis] -> bau","  placa ou alcapao segura a agua"],
+    "Água corrente empurra por até 8 blocos em linha reta.",
+    ["Incline os canais na direção do funil final.","Use placa, botão ou alçapão para segurar a água onde precisa.","No fim, coloque funis apontando para o baú.","Teste jogando um item no ponto mais distante."],
+    "Farm de mob, de ferro, coleta de plantação e drop em geral.",
+    "Canal em escadinha aumenta o alcance sem precisar de redstone.",
+    "Item parando na borda porque a corrente está desalinhada."),
+  RS("Forno automático",["itens"],"Alimenta item e combustível e retira o resultado sozinho.",
+    ["  bau item      bau combustivel","      |                |","  [funil cima]   [funil lado]","         \\        /","          [FORNO]","             |","        [funil baixo] -> bau"],
+    "Funil de cima entrega o item; o lateral, o combustível; o de baixo retira o produto.",
+    ["Ligue o baú de cima ao funil superior.","Ligue o baú lateral ao funil da lateral.","Ponha o funil de baixo puxando o resultado.","Repita em paralelo se quiser um super smelter."],
+    "Cozinhar comida, vidro, pedra lisa e alga seca.",
+    "Mais fornos significa mais velocidade, mas exige dividir item e combustível entre eles.",
+    "Funil lateral apontado errado tenta pôr combustível no slot do item."),
+  RS("Alarme de baú cheio",["itens","sinal"],"Avisa quando o armazenamento da farm está lotando.",
+    ["  [bau] <- comparador","      |","  po de redstone","      |","  [lampada]"],
+    "Quanto mais cheio o baú, mais forte o sinal do comparador.",
+    ["Ponha o comparador atrás do baú ou barril.","Leve o sinal até uma lâmpada de redstone.","Para acender só quando estiver quase cheio, alongue o pó: sinal fraco morre antes de chegar.","Se quiser, ligue um sino em vez da lâmpada."],
+    "Saída de farm de ferro, de mob, filtro e armazenamento geral.",
+    "A distância do pó funciona como limiar: cada bloco exige um ponto a mais de sinal.",
+    "Baú duplo muda a escala do sinal. Teste antes de fechar a parede."),
+  RS("Trava de manutenção",["sinal"],"Desliga a farm para consertar sem quebrar nada.",
+    ["  [alavanca] -> linha principal","        |","  trava funis / clock / agua","        |","  [lampada] mostra ligado"],
+    "Toda farm boa merece um botão de desligar.",
+    ["Escolha o que precisa parar: clock, água, funil ou spawn.","Ponha uma alavanca em lugar acessível.","Use tocha se precisar inverter o comportamento.","Marque com lâmpada se está ligado ou desligado."],
+    "Farm de mob, filtro de item, dropper com clock e qualquer coisa com lava.",
+    "Desligar clock quando ninguém está por perto ajuda o desempenho do servidor.",
+    "Desligar só metade do sistema e acumular mob ou item em lugar perigoso.")
+];
+
+/* =====================================================================
+   RENDERIZACAO
+   ===================================================================== */
+const SECOES = [
+  {id:"entrar",   n:"01", nome:"Entrar"},
+  {id:"mundo",    n:"02", nome:"Nosso mundo"},
+  {id:"minerar",  n:"03", nome:"Mineração"},
+  {id:"encantar", n:"04", nome:"Encantamentos"},
+  {id:"villagers",n:"05", nome:"Villagers"},
+  {id:"pocoes",   n:"06", nome:"Poções"},
+  {id:"farms",    n:"07", nome:"Farms"},
+  {id:"redstone", n:"08", nome:"Redstone"}
+];
+
+const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const norm = s => String(s==null?"":s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const el = id => document.getElementById(id);
+
+function cabecalho(olho,titulo,texto){
+  return `<div class="sec-head"><span class="eyebrow">${esc(olho)}</span><h2>${esc(titulo)}</h2>${texto?`<p>${esc(texto)}</p>`:""}</div>`;
+}
+function poco(k,v,cls){return `<div class="well"><div class="k">${esc(k)}</div><div class="v ${cls||""}">${esc(v)}</div></div>`;}
+function pocoHtml(k,v,cls){return `<div class="well"><div class="k">${esc(k)}</div><div class="v ${cls||""}">${v}</div></div>`;}
+
+/* ---------- 01 ENTRAR ---------- */
+function pagEntrar(){
+  return `
+  <div class="hero">
+    <div class="hero-top">
+      <h1 class="big">Minezin Emo</h1>
+      <p class="lead">Servidor Bedrock de sobrevivência, versão ${esc(MUNDO.versao)}, no ar 24 horas por dia.
+      Mundo próprio, seis addons e o mapa já medido bioma por bioma. Esta página é o manual da casa:
+      como entrar, onde ficam as coisas e como jogar bem aqui.</p>
+      <div class="seedrow">
+        <span class="seedchip">Seed <b>${esc(MUNDO.seed)}</b></span>
+        <span class="seedchip">Spawn <b>X ${MUNDO.spawn.x} &middot; Z ${MUNDO.spawn.z}</b></span>
+        <span class="seedchip">Vagas <b>20</b></span>
+        <span class="seedchip">Modo <b>Sobrevivência</b></span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    ${cabecalho("Endereço","Como entrar","Um endereço só, igual para todas as plataformas. A porta é a padrão do Bedrock, então dá para deixar o campo vazio.")}
+    <div class="grid g2">
+      <div class="card" style="border-left:3px solid var(--red)">
+        <div class="card-head">
+          <div><h3>Endereço do servidor</h3><div class="sub">Serve em PC, celular, Xbox, PlayStation e Switch</div></div>
+          <span class="tag ok">No ar 24h</span>
+        </div>
+        <div class="wells addr">
+          ${poco("Endereço",CONEXAO.principal.host,"red")}
+          ${poco("Porta",CONEXAO.principal.porta)}
+        </div>
+        <div class="tags">
+          <button class="btn p" type="button" data-copy="${esc(CONEXAO.principal.host)}">Copiar endereço</button>
+          <button class="btn" type="button" data-copy="${esc(CONEXAO.principal.porta)}">Copiar porta</button>
+        </div>
+        <p>A porta <b>19132</b> é a padrão do Bedrock. Na maioria dos aparelhos dá para deixar o campo de porta em branco que ele acerta sozinho.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><h3>Se o nome não funcionar</h3><div class="sub">Use o IP direto</div></div>
+          <span class="tag b">Reserva</span>
+        </div>
+        <div class="wells addr">
+          ${poco("IP",CONEXAO.ip.host)}
+          ${poco("Porta",CONEXAO.ip.porta)}
+        </div>
+        <div class="tags">
+          <button class="btn" type="button" data-copy="${esc(CONEXAO.ip.host)}">Copiar IP</button>
+        </div>
+        <p>Alguns DNS com filtro de segurança bloqueiam domínio gratuito. Se o jogo disser que o endereço está mal formatado, é quase sempre isso — o IP funciona em qualquer caso.</p>
+      </div>
+    </div>
+
+    <div class="grid g4" style="margin-top:12px">
+      ${poco("Onde roda",HOSPEDAGEM.onde)}
+      ${poco("Sistema",HOSPEDAGEM.so)}
+      ${poco("Disponível",HOSPEDAGEM.quando)}
+      ${poco("Versão",MUNDO.versao)}
+    </div>
+    <div class="note ok" style="margin-top:12px"><b>Não depende mais de ninguém.</b> ${esc(HOSPEDAGEM.nota)}</div>
+  </section>
+
+  <section>
+    ${cabecalho("Passo a passo","Celular, PC e tablet","O caminho mais fácil: essas plataformas têm o botão de adicionar servidor.")}
+    <div class="card">
+      <ol class="steps">
+        <li>Abra o Minecraft e vá em <b>Jogar</b>.</li>
+        <li>Abra a aba <b>Servidores</b> e role até o fim da lista.</li>
+        <li>Toque em <b>Adicionar servidor</b>.</li>
+        <li>Nome: o que você quiser.<br>Endereço: <b>${esc(CONEXAO.principal.host)}</b><br>Porta: <b>${esc(CONEXAO.principal.porta)}</b> — ou deixe em branco.</li>
+        <li>Salvar e entrar. Fica guardado para as próximas vezes.</li>
+      </ol>
+      <div class="note ok"><b>É só isso.</b> Sem DNS, sem reiniciar aparelho, sem passo extra. Celular e PC entram direto.</div>
+    </div>
+  </section>
+
+  <section>
+    ${cabecalho("Console","Xbox, PlayStation e Switch","O console não tem onde digitar um endereço. Quem joga no console entra pelo celular — mesma conta, mesmo mundo.")}
+    <div class="card lift">
+      <div class="card-head">
+        <div><h3>Entre pelo app do celular</h3><div class="sub">É o mesmo jogo, a mesma conta e a mesma sobrevivência</div></div>
+        <span class="tag ok">Recomendado</span>
+      </div>
+      <p>O Minecraft do celular é o mesmo Bedrock do Xbox, do PlayStation e do Switch. Você entra com a
+      <b>mesma conta Microsoft</b>, cai no <b>mesmo mundo</b> e joga junto com quem está no PC — bastando
+      digitar o endereço uma vez.</p>
+      <ol class="steps">
+        <li>Instale o <b>Minecraft</b> na Play Store ou na App Store e entre com a mesma conta Microsoft que você usa no console.</li>
+        <li>Toque em <b>Jogar</b>, abra a aba <b>Servidores</b> e role até o fim da lista.</li>
+        <li><b>Adicionar servidor</b>. Endereço <b>${esc(CONEXAO.principal.host)}</b>, porta <b>${esc(CONEXAO.principal.porta)}</b>.</li>
+        <li>Salvar e entrar. Da próxima vez ele já está na lista.</li>
+      </ol>
+      <div class="note ok"><b>O progresso não fica no aparelho.</b> A casa, o baú e o mundo inteiro moram no servidor.
+      Dá para construir hoje no celular e continuar de outro aparelho amanhã, no mesmo lugar onde você parou.</div>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card">
+        <h3>O controle vai junto</h3>
+        <p>Se o incômodo for jogar no toque da tela, o controle do Xbox, do PlayStation e do Switch conecta
+        no celular por Bluetooth, e o Minecraft reconhece na hora. Com o celular apoiado, fica igual ao console.</p>
+      </div>
+      <div class="card">
+        <h3>Por que o console não entra direto</h3>
+        <p>Na lista de servidores do console só aparecem os cinco parceiros comerciais que vêm de fábrica, e
+        não existe campo para digitar um endereço. É uma trava da Microsoft e da Sony — não tem nada a ver
+        com o nosso servidor, e vale para qualquer servidor privado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    ${cabecalho("Regras da casa","Como o servidor está configurado","Lido direto do server.properties e das gamerules do mundo.")}
+    <div class="coord">
+      <div class="coord-row head"><span>Regra</span><span class="xyz">Valor</span></div>
+      ${REGRAS.map(([k,v,d])=>`<div class="coord-row"><span class="nm">${esc(k)}<small>${esc(d)}</small></span><span class="xyz">${esc(v)}</span></div>`).join("")}
+    </div>
+  </section>
+
+  <section>
+    ${cabecalho("Administração","Comandos do dono","Digitados no console do servidor, que agora abre por SSH numa sessão tmux — não no jogo.")}
+    <div class="card">
+      <div class="coord">
+        <div class="coord-row head"><span>Comando</span><span class="xyz">O que faz</span></div>
+        ${[["list","quem está online"],["op NomeDoJogador","dá poder de admin"],["deop NomeDoJogador","tira o poder"],["kick Nome motivo","expulsa"],["say mensagem","recado para todos"],["time set day","vira dia"],["weather clear","limpa o tempo"],["save hold / save resume","pausa a escrita em disco para backup"],["stop","desliga com segurança"]]
+          .map(([c,d])=>`<div class="coord-row"><span class="nm" style="font-family:var(--mono);font-size:13.5px">${esc(c)}</span><span class="xyz" style="font-family:var(--body);font-weight:400;color:var(--muted);white-space:normal;text-align:right">${esc(d)}</span></div>`).join("")}
+      </div>
+      <div class="note"><b>Como abrir o console:</b> o atalho <span style="font-family:var(--mono)">console-servidor-aws.bat</span> conecta por SSH e entra na sessão. Para sair sem desligar o servidor, use <b>Ctrl+B</b> e depois <b>D</b>. Nunca use Ctrl+C ali: derruba o servidor.</div>
+      <div class="note ok"><b>Se cair, volta sozinho.</b> O serviço roda sob systemd com reinício automático em 10 segundos, e sobe junto com a máquina.</div>
+    </div>
+  </section>`;
+}
+
+/* ---------- 02 MUNDO ---------- */
+/* Cor de cada bioma, aproximando o tom real do jogo visto de cima. */
+const COR_BIOMA = {
+  cherry_grove:"#D98AAE", meadow:"#7FBF63", plains:"#8DB360", sunflower_plains:"#C6BE55",
+  flower_forest:"#82AC63", forest:"#4E7A3C", birch_forest:"#7CA05C", taiga:"#3F6B50",
+  pale_garden:"#8C9A8C", savanna:"#BDB556", savanna_plateau:"#A89B4E",
+  desert:"#DFD08C", jungle:"#2F6B2F", bamboo_jungle:"#3E7A34", mangrove_swamp:"#4B6B45",
+  frozen_peaks:"#DCE7EF", snowy_slopes:"#CFDCE6", grove:"#BACBD3", jagged_peaks:"#C3CBD4",
+  stony_peaks:"#9AA0A6", beach:"#D8CEA2", river:"#3E6E9E",
+  ocean:"#2C5C86", cold_ocean:"#2A5478", deep_ocean:"#22486B", deep_cold_ocean:"#1E4162",
+  lukewarm_ocean:"#326892", deep_lukewarm_ocean:"#28557C", warm_ocean:"#3A79A6"
+};
+/* Biomas de caverna nao pintam a superficie: viram marcador. */
+const SUBTERRANEO = new Set(["dripstone_caves","lush_caves","deep_dark"]);
+
+function svgMapa(raio){
+  const S = 640, pad = 30, C = S/2, area = S - pad*2;
+  const escala = area / (raio*2);
+  const px = p => [pad + (p.x + raio)*escala, pad + (p.z + raio)*escala];
+
+  const superficie = BIOMAS.filter(b => !SUBTERRANEO.has(b.id));
+  const cavernas   = BIOMAS.filter(b =>  SUBTERRANEO.has(b.id));
+  const est        = ESTRUTURAS.filter(e => Math.abs(e.x)<=raio && Math.abs(e.z)<=raio);
+
+  let g = `<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="Mapa de biomas da seed, preenchido a partir das amostras medidas">`;
+  g += `<defs><clipPath id="cm"><rect x="${pad}" y="${pad}" width="${area}" height="${area}" rx="4"/></clipPath></defs>`;
+  g += `<rect x="0" y="0" width="${S}" height="${S}" fill="#0A0D10"/>`;
+  g += `<g clip-path="url(#cm)">`;
+
+  /* Preenchimento por vizinho mais proximo: cada celula recebe a cor do
+     bioma medido mais perto dela. E aproximacao a partir das amostras, nao
+     leitura chunk a chunk.
+     Celulas vizinhas de mesma cor viram uma faixa unica, para nao despejar
+     milhares de retangulos no DOM do celular. */
+  const N = 56, passo = area/N;
+  for(let j=0;j<N;j++){
+    const wz = -raio + (j+0.5)*(raio*2/N);
+    let corAtual = null, iniciou = 0;
+    const fecha = (ate) => {
+      if(corAtual === null) return;
+      const x = pad + iniciou*passo, w = (ate-iniciou)*passo + 0.6;
+      g += `<rect x="${x.toFixed(1)}" y="${(pad+j*passo).toFixed(1)}" width="${w.toFixed(1)}" height="${(passo+0.6).toFixed(1)}" fill="${corAtual}" opacity=".9"/>`;
+    };
+    for(let i=0;i<N;i++){
+      const wx = -raio + (i+0.5)*(raio*2/N);
+      let melhor=null, dmin=Infinity;
+      for(const b of superficie){
+        const d = (b.x-wx)*(b.x-wx) + (b.z-wz)*(b.z-wz);
+        if(d<dmin){ dmin=d; melhor=b; }
+      }
+      const cor = melhor ? (COR_BIOMA[melhor.id] || "#5F8D6A") : null;
+      if(cor !== corAtual){ fecha(i); corAtual = cor; iniciou = i; }
+    }
+    fecha(N);
+  }
+  g += `</g>`;
+
+  /* malha de coordenadas por cima */
+  for(let k=0;k<=8;k++){
+    const t = pad + k*(area/8);
+    g += `<line x1="${t.toFixed(1)}" y1="${pad}" x2="${t.toFixed(1)}" y2="${S-pad}" stroke="#0A0D10" stroke-width="1" opacity=".35"/>`;
+    g += `<line x1="${pad}" y1="${t.toFixed(1)}" x2="${S-pad}" y2="${t.toFixed(1)}" stroke="#0A0D10" stroke-width="1" opacity=".35"/>`;
+  }
+  const marca = [-raio, -raio/2, 0, raio/2, raio];
+  marca.forEach((v,idx)=>{
+    const t = pad + (idx/4)*area;
+    g += `<text x="${t.toFixed(1)}" y="${(pad-9).toFixed(1)}" fill="#7C8996" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="9.5" text-anchor="middle">${v}</text>`;
+    g += `<text x="${(pad-7).toFixed(1)}" y="${(t+3).toFixed(1)}" fill="#7C8996" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="9.5" text-anchor="end">${v}</text>`;
+  });
+  g += `<rect x="${pad}" y="${pad}" width="${area}" height="${area}" fill="none" stroke="#2F3941" stroke-width="1" rx="4"/>`;
+  g += `<text x="${S-pad}" y="${S-pad+16}" fill="#54606C" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="9.5" text-anchor="end">X leste →   Z sul ↓</text>`;
+
+  /* cavernas medidas, como losango */
+  cavernas.filter(b=>Math.abs(b.x)<=raio&&Math.abs(b.z)<=raio).forEach(b=>{
+    const [x,y]=px(b);
+    g += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(45)"><rect x="-4" y="-4" width="8" height="8" fill="#0A0D10" stroke="#E09A45" stroke-width="1.8"/><title>${esc(b.nome)} — X ${b.x} / Z ${b.z} (${b.dist} blocos)</title></g>`;
+  });
+
+  /* estruturas */
+  est.forEach(e=>{
+    const [x,y]=px(e);
+    g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5" fill="#0A0D10" opacity=".55"/>`;
+    g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#0A0D10" stroke="#E6DCC6" stroke-width="1.8"><title>${esc(e.nome)} — X ${e.x} / Z ${e.z} (${e.dist} blocos)</title></circle>`;
+  });
+
+  /* rotulo das estruturas mais proximas */
+  [...est].sort((a,b)=>a.dist-b.dist).slice(0, raio<=600?4:3).forEach(e=>{
+    const [x,y]=px(e);
+    const dir = x>C? -1 : 1;
+    const tx = (x+dir*10).toFixed(1), ty=(y+3.5).toFixed(1);
+    const anc = x>C?"end":"start";
+    g += `<text x="${tx}" y="${ty}" fill="#0A0D10" stroke="#0A0D10" stroke-width="3.5" stroke-linejoin="round" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="12.5" font-weight="700" text-anchor="${anc}">${esc(e.nome)}</text>`;
+    g += `<text x="${tx}" y="${ty}" fill="#E9EDF1" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="12.5" font-weight="700" text-anchor="${anc}">${esc(e.nome)}</text>`;
+  });
+
+  /* spawn */
+  const [sx,sy]=px(MUNDO.spawn);
+  g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="10" fill="none" stroke="#0A0D10" stroke-width="4"/>`;
+  g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="10" fill="none" stroke="#FFFFFF" stroke-width="2"/>`;
+  g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="2.5" fill="#FFFFFF"/>`;
+  g += `<text x="${(sx+15).toFixed(1)}" y="${(sy-11).toFixed(1)}" fill="#0A0D10" stroke="#0A0D10" stroke-width="4" stroke-linejoin="round" font-family="IBM Plex Sans Condensed, system-ui, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.4">SPAWN</text>`;
+  g += `<text x="${(sx+15).toFixed(1)}" y="${(sy-11).toFixed(1)}" fill="#FFFFFF" font-family="IBM Plex Sans Condensed, system-ui, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.4">SPAWN</text>`;
+  g += `</svg>`;
+  return g;
+}
+
+function pagMundo(){
+  const perto = [...BIOMAS,...ESTRUTURAS].filter(p=>p.dist<=400).length;
+  return `
+  <div class="hero">
+    <div class="hero-top">
+      <span class="eyebrow">Seed ${esc(MUNDO.seed)}</span>
+      <h1 class="big">O mapa daqui</h1>
+      <p class="lead">Nada nesta página foi copiado de site de seed. Cada coordenada abaixo saiu do comando <span style="font-family:var(--mono);font-size:14px">locate</span>
+      rodado no nosso próprio servidor, na ${esc(MUNDO.versao)}, com a nossa seed. São ${BIOMAS.length} biomas e ${ESTRUTURAS.length} estruturas medidos de verdade.</p>
+      <div class="seedrow">
+        <button class="seedchip" type="button" data-copy="${esc(MUNDO.seed)}">Seed <b>${esc(MUNDO.seed)}</b></button>
+        <span class="seedchip">Mundo <b>${esc(MUNDO.nome)}</b></span>
+        <span class="seedchip">A menos de 400 blocos <b>${perto} pontos</b></span>
+      </div>
+    </div>
+    <div class="mapwrap">
+      <div class="mapgrid">
+        <div class="mapbox" id="mapBox">${svgMapa(600)}</div>
+        <div class="maplegend">
+          <h4>Legenda</h4>
+          <div class="legrow"><span class="legdot" style="background:#0A0D10;border:1.8px solid #E6DCC6"></span> Estrutura</div>
+          <div class="legrow"><span class="legdot sq" style="background:#0A0D10;border:1.8px solid #E09A45;transform:rotate(45deg)"></span> Caverna medida</div>
+          <div class="legrow"><span class="legdot" style="background:#fff"></span> Spawn</div>
+          <h4 style="margin-top:16px">Biomas</h4>
+          <div class="legrow"><span class="legdot sq" style="background:#D98AAE"></span> Cerejeiras</div>
+          <div class="legrow"><span class="legdot sq" style="background:#7FBF63"></span> Prado e planície</div>
+          <div class="legrow"><span class="legdot sq" style="background:#DCE7EF"></span> Picos e neve</div>
+          <div class="legrow"><span class="legdot sq" style="background:#4E7A3C"></span> Floresta</div>
+          <div class="legrow"><span class="legdot sq" style="background:#BDB556"></span> Savana e deserto</div>
+          <div class="legrow"><span class="legdot sq" style="background:#2C5C86"></span> Oceano e rio</div>
+          <h4 style="margin-top:16px">Alcance</h4>
+          <div class="zoombar" id="zoomBar">
+            <button class="zoombtn" type="button" data-raio="600" aria-pressed="true">600</button>
+            <button class="zoombtn" type="button" data-raio="2000" aria-pressed="false">2 mil</button>
+            <button class="zoombtn" type="button" data-raio="5000" aria-pressed="false">5 mil</button>
+          </div>
+          <p style="color:var(--muted);font-size:13px;margin-top:12px">Toque num ponto para ver o nome e a coordenada. O círculo branco é o spawn.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    ${cabecalho("Como ler","As distâncias são contadas da origem","O comando roda a partir do console, que fica em X 0 / Z 0 — não do spawn. O spawn de verdade fica em X " + MUNDO.spawn.x + " / Z " + MUNDO.spawn.z + ", pertinho da origem, então na prática a diferença é pequena.")}
+    <div class="note">${esc(NAO_VARRIDO)}</div>
+  </section>
+
+  <section>
+    ${cabecalho("Estruturas","Onde ficam as coisas importantes","Ordenado da mais perto para a mais longe. A coluna do Nether é onde construir o portal para sair perto do alvo.")}
+    <div class="filters">
+      <input id="qEstrutura" type="search" placeholder="Buscar estrutura ou coordenada">
+    </div>
+    <div class="coord" id="listaEstruturas"></div>
+  </section>
+
+  <section>
+    ${cabecalho("Biomas","Os "+BIOMAS.length+" biomas encontrados","Se um bioma não está aqui, o servidor não o achou dentro do raio de busca a partir da origem.")}
+    <div class="filters">
+      <select id="fBioma">
+        <option value="todos">Todos os biomas</option>
+        <option value="cenico">Cênicos</option>
+        <option value="montanha">Montanha</option>
+        <option value="caverna">Caverna</option>
+        <option value="oceano">Oceano</option>
+        <option value="comum">Comuns</option>
+        <option value="recurso">Recurso</option>
+      </select>
+      <input id="qBioma" type="search" placeholder="Buscar bioma">
+    </div>
+    <div class="coord" id="listaBiomas"></div>
+  </section>
+
+  <section>
+    ${cabecalho("Addons","O que está instalado no mundo","Seis packs de comportamento, mais os de recurso que eles exigem. Todos foram testados carregando na "+MUNDO.versao+".")}
+    <div class="grid g2">
+      ${ADDONS.map(a=>`
+        <div class="card">
+          <div class="card-head">
+            <div><h3>${esc(a.nome)}</h3><div class="sub">${esc(a.tipo)} · versão ${esc(a.ver)}</div></div>
+            <span class="tag ${a.estado==="ok"?"ok":"warn"}">${a.estado==="ok"?"Testado":"Atenção"}</span>
+          </div>
+          <p>${esc(a.faz)}</p>
+        </div>`).join("")}
+    </div>
+    <div class="note warn" style="margin-top:12px"><b>Sobre o F3 Debug Screen:</b> ele declara suporte até a 1.21.9x e substitui o arquivo do jogador.
+    Carrega sem erro na ${esc(MUNDO.versao)}, mas não é mantido para essa versão — se um dia quebrar, é a primeira linha a remover do
+    <span style="font-family:var(--mono)">world_behavior_packs.json</span>. E não instale outro addon que mexa no jogador sem checar conflito.</div>
+    <div class="note" style="margin-top:10px"><b>Sobre conquistas:</b> o mundo roda sem experimentos ligados, então as conquistas continuam valendo normalmente.</div>
+  </section>`;
+}
+
+/* ---------- 03 MINERAR ---------- */
+const DIAGRAMAS = {
+  branch:["Túnel 1x2 com galhos a cada 3 blocos",[".D..D..D..D..",".D..D..D..D..","AAAAAAAAAAAAA",".D..D..D..D..",".D..D..D..D.."]],
+  seguro:["Mesma malha, acima da faixa de lava",["......L......","RRRRRRRRRRRRR","AAAAAAAAAAAAA","..S.....S....","RRRRRRRRRRRRR"]],
+  poke:["Buracos 1x1 alternados, sem sobrepor",[".D.D.D.D.D.D.",".D.D.D.D.D.D.","AAAAAAAAAAAAA","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]],
+  caverna:["Ilumine e avance por bolsões seguros",["AAAALAAAAAAAA","AA....AAAA.RR","AA....AAAA.RR","RRSSSRRRRRRRR","RRRRRRRRRRRRR"]],
+  montanha:["Cortes curtos na pedra exposta",["AAAAAAAAAAAAA","AAAAADDDAAAAA","AAARRDDDRRAAA","ARRRRRRRRRRRA","RRRRRRRRRRRRR"]],
+  veio:["Siga o corpo do veio como trilha",["RRDDDRRRRRRRR","RRRDDDDRRRRRR","RRRRDDDDRRRRR","RRRRRDDDRRRRR","RRRRRRDRRRRRR"]],
+  nether:["Mine junto da rota e tampe a lava na hora",[".D....L..D...","RRRRRRRRRRRRR","AAAAAAAAAAAAA","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]],
+  cama:["Cama à frente, você atrás do bloco",["...I..L......","RRRRRRRRRRRRR","AASAAAAAAAAAA","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]],
+  tnt:["Explosivo espaçado no eixo principal",["..I...I...I..","RRRRRRRRRRRRR","AAAAAAAAAAAAA","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]],
+  beacon:["Mesma malha, acelerada pelo beacon",[".D..D..D..D..",".D..D..D..D..","AAAAAASAAAAAA",".D..D..D..D..",".D..D..D..D.."]],
+  superficie:["Coleta na superfície, sem abrir mina",["AAAAAAAAAAAAA","AAAAAAAAAAAAA","RRRRRRRRRRRRR","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]],
+  aldeia:["Estações alinhadas, aldeões protegidos",["AAAAAAAAAAAAA",".SSS.SSS.SSS.","RRRRRRRRRRRRR","RRRRRRRRRRRRR","RRRRRRRRRRRRR"]]
+};
+const MAPA_CEL = {".":"c-none","A":"c-air","R":"c-rock","D":"c-dig","L":"c-lava","W":"c-water","S":"c-safe","I":"c-item"};
+
+function diagrama(tipo){
+  const d = DIAGRAMAS[tipo] || DIAGRAMAS.branch;
+  const linhas = d[1], cols = linhas[0].length;
+  const cels = linhas.join("").split("").map(c=>`<div class="cell ${MAPA_CEL[c]||"c-none"}"></div>`).join("");
+  return `<div>
+    <div class="blocks" style="grid-template-columns:repeat(${cols},minmax(0,1fr))" role="img" aria-label="${esc(d[0])}">${cels}</div>
+    <p style="color:var(--muted);font-size:13px;margin-top:7px">${esc(d[0])}</p>
+  </div>`;
+}
+
+function pagMinerar(){
+  return `
+  ${cabecalho("Mineração","Onde cavar cada coisa","O Y certo muda mais o rendimento do que qualquer encantamento. Escolha o minério para abrir os métodos, o passo a passo e o desenho da mina.")}
+  <div class="filters">
+    <select id="fMinerio"><option value="">Todos os minérios</option>${MINERIOS.map(m=>`<option value="${m.id}">${esc(m.nome)}</option>`).join("")}</select>
+    <input id="qMinerio" type="search" placeholder="Buscar minério, camada ou técnica">
+    <button class="btn" id="limpaMinerio" type="button">Limpar</button>
+  </div>
+  <div id="gradeMinerios"></div>
+  <div id="detalheMinerio"></div>`;
+}
+
+function cartaoMinerio(m){
+  return `<button class="card" data-minerio="${m.id}" style="text-align:left;cursor:pointer;border-left:3px solid ${m.cor}">
+    <div class="card-head">
+      <div><h3>${esc(m.nome)}</h3><div class="sub">${esc(m.dim)} · ${esc(m.ferramenta)}</div></div>
+      <span class="tag b">${esc(m.pico)}</span>
+    </div>
+    <div class="wells"><div class="well"><div class="k">Pico</div><div class="v">${esc(m.pico)}</div></div><div class="well"><div class="k">Alternativa</div><div class="v" style="font-size:13px">${esc(m.alt)}</div></div></div>
+    <p>${esc(m.resumo)}</p>
+    <div class="tags">${m.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+  </button>`;
+}
+
+function detalheMinerio(m){
+  return `
+  <div class="card" style="border-left:3px solid ${m.cor};margin-bottom:16px">
+    <div class="card-head">
+      <div><h3 style="font-size:23px">${esc(m.nome)}</h3><div class="sub">${esc(m.dim)} · precisa de ${esc(m.ferramenta)}</div></div>
+      <button class="btn" id="voltaMinerios" type="button">Voltar</button>
+    </div>
+    <div class="wells w4">
+      ${poco("Melhor camada",m.pico,"red")}${poco("Alternativa",m.alt)}${poco("Faixa total",m.faixa)}${poco("Bioma",m.bioma)}
+    </div>
+    <p>${esc(m.resumo)}</p>
+  </div>
+  <section>
+    ${cabecalho("Qual caminho","Escolha pelo seu momento","")}
+    <div class="grid g3">${m.perfis.map(([t,d])=>`<div class="card"><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("")}</div>
+  </section>
+  <section>
+    ${cabecalho("Métodos","Passo a passo e desenho da mina","")}
+    <div class="grid g2">
+      ${m.metodos.map(x=>`
+        <div class="card">
+          <div class="card-head">
+            <div><h3>${esc(x.nome)}</h3><div class="sub">${esc(x.quando)}</div></div>
+            <span class="tag r">${esc(x.y)}</span>
+          </div>
+          <div class="tags"><span class="tag ${x.risco==="alto"?"crit":x.risco==="médio"?"warn":"ok"}">Risco ${esc(x.risco)}</span><span class="tag">Custo ${esc(x.custo)}</span></div>
+          <ol class="steps">${x.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+          ${diagrama(x.dia)}
+          <details class="acc"><summary>Vantagens e limites</summary><div class="acc-body">
+            <div><div class="k" style="font:700 10px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ok);margin-bottom:7px">Vantagens</div><ul class="list">${x.pros.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>
+            <div><div class="k" style="font:700 10px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--crit);margin-bottom:7px">Limites</div><ul class="list">${x.contras.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>
+          </div></details>
+        </div>`).join("")}
+    </div>
+  </section>`;
+}
+
+/* ---------- 04 ENCANTAR ---------- */
+function pagEncantar(){
+  return `
+  ${cabecalho("Encantamentos","O catálogo e os kits finais","Cada encantamento traz o nome em inglês junto, porque os nomes em português mudam entre versões e muita gente joga em inglês.")}
+  <section>
+    <div class="grid g3">
+      ${REGRAS_BIGORNA.slice(0,3).map(([t,d])=>`<div class="card"><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("")}
+    </div>
+    <details class="acc" style="margin-top:12px"><summary>Mais três regras de bigorna que economizam níveis</summary><div class="acc-body">
+      ${REGRAS_BIGORNA.slice(3).map(([t,d])=>`<div><b>${esc(t)}.</b> ${esc(d)}</div>`).join("")}
+    </div></details>
+  </section>
+  <section>
+    ${cabecalho("Kits","Como montar cada item sem estourar o preço","A ordem importa: livro com livro primeiro, item por último.")}
+    <div class="filters">
+      <select id="fKit">
+        <option value="todos">Todos os kits</option>
+        <option value="armadura">Armadura</option>
+        <option value="ferramenta">Ferramentas</option>
+        <option value="arma">Corpo a corpo</option>
+        <option value="distancia">Arco, besta e tridente</option>
+        <option value="utilidade">Utilidade</option>
+      </select>
+      <input id="qKit" type="search" placeholder="Buscar item ou encantamento">
+    </div>
+    <div class="grid g2" id="gradeKits"></div>
+    <div class="empty hidden" id="vazioKit">Nenhum kit com esse filtro.</div>
+  </section>
+  <section>
+    ${cabecalho("Catálogo","Todos os "+ENCANTAMENTOS.length+" encantamentos","O que faz, onde entra, com o que briga e de onde vem.")}
+    <div class="filters">
+      <select id="fEnc">
+        <option value="todos">Todos</option>
+        <option value="armadura">Armadura</option>
+        <option value="ferramenta">Ferramentas</option>
+        <option value="arma">Corpo a corpo</option>
+        <option value="distancia">Arco e besta</option>
+        <option value="tridente">Tridente</option>
+        <option value="tesouro">Só de tesouro</option>
+        <option value="maldicao">Maldições</option>
+      </select>
+      <input id="qEnc" type="search" placeholder="Buscar encantamento, efeito ou conflito">
+    </div>
+    <div class="grid g2" id="gradeEnc"></div>
+    <div class="empty hidden" id="vazioEnc">Nenhum encantamento com esse filtro.</div>
+  </section>`;
+}
+
+function cartaoEnc(e){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(e.nome)}</h3><div class="sub">${esc(e.en)} · ${esc(e.onde)}</div></div>
+      <span class="tag r">Máx ${esc(e.max)}</span>
+    </div>
+    <p><b style="color:var(--ink)">O que faz.</b> ${esc(e.faz)}</p>
+    <p>${esc(e.como)}</p>
+    <div class="wells"><div class="well"><div class="k">Conflito</div><div class="v sm">${esc(e.conflito)}</div></div><div class="well"><div class="k">De onde vem</div><div class="v sm">${esc(e.fonte)}</div></div></div>
+  </div>`;
+}
+
+function cartaoKit(k){
+  const rot = {armadura:"Armadura",ferramenta:"Ferramenta",arma:"Corpo a corpo",distancia:"Distância",utilidade:"Utilidade"};
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(k.nome)}</h3><div class="sub">${esc(rot[k.cat]||k.cat)}</div></div>
+      <span class="tag b">${k.ordem.length} passos</span>
+    </div>
+    <p><b style="color:var(--ink)">Escolha.</b> ${esc(k.escolha)}</p>
+    <div>
+      <div style="font:700 10px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Encantamentos do kit</div>
+      <div class="tags">${k.ideal.map(i=>`<span class="tag">${esc(i)}</span>`).join("")}</div>
+    </div>
+    <details class="acc"><summary>Ordem na bigorna</summary><div class="acc-body">
+      <ol class="steps">${k.ordem.map(o=>`<li>${esc(o)}</li>`).join("")}</ol>
+      <div class="note crit"><b>Evite:</b> ${esc(k.evite)}</div>
+      <div class="note"><b>Vale saber:</b> ${esc(k.nota)}</div>
+    </div></details>
+  </div>`;
+}
+
+/* ---------- 05 VILLAGERS ---------- */
+function pagVillagers(){
+  return `
+  ${cabecalho("Villagers","Comércio e a checklist do trading hall","O comércio é a economia do servidor. A checklist embaixo é compartilhada: se um marcar, todo mundo vê.")}
+  <section>
+    <div class="grid g3">
+      ${REGRAS_REROLL.slice(0,3).map(([t,d])=>`<div class="card"><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("")}
+    </div>
+    <details class="acc" style="margin-top:12px"><summary>Mais três regras de sorteio e trava</summary><div class="acc-body">
+      ${REGRAS_REROLL.slice(3).map(([t,d])=>`<div><b>${esc(t)}.</b> ${esc(d)}</div>`).join("")}
+    </div></details>
+  </section>
+
+  <section>
+    ${cabecalho("Checklist","O que caçar no trading hall","Marque conforme conseguir. O progresso fica salvo e aparece para quem abrir a página depois.")}
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-head">
+        <div><h3>Progresso</h3><div class="sub" id="chkResumo">carregando</div></div>
+        <span class="syncdot" id="chkSync">local</span>
+      </div>
+      <div class="bar"><i id="chkBarra" style="width:0%"></i></div>
+      <div class="tags"><button class="btn" id="chkLimpar" type="button">Desmarcar tudo</button></div>
+    </div>
+    <div class="filters">
+      <select id="fChkCat">
+        <option value="todos">Todos os alvos</option>
+        <option value="livros">Livros encantados</option>
+        <option value="equipamento">Equipamento de diamante</option>
+        <option value="economia">Esmeralda e recursos</option>
+        <option value="exploracao">Exploração e reserva</option>
+      </select>
+      <select id="fChkStatus">
+        <option value="todos">Feitos e pendentes</option>
+        <option value="pendente">Só pendentes</option>
+        <option value="feito">Só feitos</option>
+      </select>
+      <input id="qChk" type="search" placeholder="Buscar profissão, livro ou preço">
+    </div>
+    <div class="grid g2" id="gradeChk"></div>
+    <div class="empty hidden" id="vazioChk">Nenhum alvo com esse filtro.</div>
+  </section>
+
+  <section>
+    ${cabecalho("Tabelas","Todas as trocas por profissão","Preço base, antes de desconto por cura, reputação e Herói da Vila.")}
+    <div class="filters">
+      <select id="fVil"><option value="todos">Todas as profissões</option>${VILLAGERS.map(v=>`<option value="${v.id}">${esc(v.nome)}</option>`).join("")}</select>
+      <input id="qVil" type="search" placeholder="Buscar item, profissão ou estação">
+    </div>
+    <div class="grid g2" id="gradeVil"></div>
+    <div class="empty hidden" id="vazioVil">Nenhuma profissão com esse filtro.</div>
+  </section>`;
+}
+
+function cartaoVil(v){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(v.nome)}</h3><div class="sub">Estação: ${esc(v.estacao)}</div></div>
+      <span class="tag b">${esc(v.foco.split(",")[0])}</span>
+    </div>
+    <p>${esc(v.nota)}</p>
+    <details class="acc"><summary>Ver as trocas nível a nível</summary><div class="acc-body">
+      ${v.niveis.map(n=>`
+        <div>
+          <div style="font:700 10px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--red-hi);margin-bottom:8px">${esc(n.nome)}</div>
+          <div class="coord">
+            ${n.trocas.map(t=>`<div class="coord-row"><span class="nm">${esc(t.paga)}${t.obs?`<small>${esc(t.obs)}</small>`:""}</span><span class="xyz" style="font-family:var(--body);font-weight:600;white-space:normal;text-align:right;font-size:14px">${esc(t.recebe)}</span></div>`).join("")}
+          </div>
+        </div>`).join("")}
+    </div></details>
+  </div>`;
+}
+
+function cartaoChk(c,feito){
+  const rotPrio={essencial:"Essencial",alta:"Alta",opcional:"Opcional"};
+  const rotModo={sorteio:"Dá para sortear",nivel:"Precisa subir nível",nenhum:"Reserva"};
+  return `<div class="card${feito?" done":""}">
+    <div class="card-head">
+      <div><h3>${esc(c.nome)}</h3><div class="sub">${esc(c.prof)} · ${esc(c.estacao)}</div></div>
+      <span class="tag ${c.prio==="essencial"?"r":c.prio==="alta"?"b":""}">${esc(rotPrio[c.prio]||c.prio)}</span>
+    </div>
+    <p><b style="color:var(--ink)">Procure:</b> ${esc(c.alvo)}</p>
+    <div class="wells"><div class="well"><div class="k">Preço-alvo</div><div class="v sm">${esc(c.preco)}</div></div><div class="well"><div class="k">Método</div><div class="v sm">${esc(rotModo[c.modo]||c.modo)} · ${esc(c.nivel)}</div></div></div>
+    <details class="acc"><summary>Como conseguir e travar</summary><div class="acc-body">
+      <div><b>Sorteio ou progressão.</b> ${esc(c.sorteio)}</div>
+      <div><b>Quando acertar.</b> ${esc(c.trava)}</div>
+      <div class="note"><b>Por que ter:</b> ${esc(c.porque)}</div>
+    </div></details>
+    <label class="chk"><input type="checkbox" data-chk="${esc(c.id)}"${feito?" checked":""}><span>${feito?"Conseguido e travado":"Marcar como conseguido"}</span></label>
+  </div>`;
+}
+
+/* ---------- 06 POCOES ---------- */
+function pagPocoes(){
+  return `
+  ${cabecalho("Poções","Receitas e quando cada uma vale","Quase tudo começa em Garrafa de água mais Verruga do Nether, que vira a Poção Estranha. Redstone alonga, glowstone reforça, pólvora torna arremessável.")}
+  <div class="filters">
+    <select id="fPoc">
+      <option value="todos">Todas as poções</option>
+      <option value="combate">Combate</option>
+      <option value="exploracao">Exploração</option>
+      <option value="utilidade">Utilidade</option>
+      <option value="negativa">Negativas</option>
+    </select>
+    <input id="qPoc" type="search" placeholder="Buscar efeito, ingrediente ou uso">
+  </div>
+  <div class="grid g2" id="gradePoc"></div>
+  <div class="empty hidden" id="vazioPoc">Nenhuma poção com esse filtro.</div>`;
+}
+
+function cartaoPoc(p){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(p.nome)}</h3><div class="sub">${esc(p.uso)}</div></div>
+      <span class="tag b">${esc(p.cats[0])}</span>
+    </div>
+    <div class="wells w3">${poco("Base",p.base)}${poco("Ingrediente",p.ing)}${poco("Melhorias",p.up)}</div>
+    <p>${esc(p.como)}</p>
+    <div class="note warn"><b>Cuidado:</b> ${esc(p.cuidado)}</div>
+  </div>`;
+}
+
+/* ---------- 07 FARMS ---------- */
+function pagFarms(){
+  return `
+  ${cabecalho("Farms","O que construir e em que ordem","Cada cartão traz o que a farm rende, o que ela custa em material e o erro que costuma fazer ela parar de funcionar.")}
+  <section>
+    ${cabecalho("Por material","Preciso de X, faço qual farm?","")}
+    <div class="filters"><input id="qMat" type="search" placeholder="Buscar material"></div>
+    <div class="coord" id="listaMat"></div>
+  </section>
+  <section>
+    ${cabecalho("As farms","Detalhe de cada uma","")}
+    <div class="filters">
+      <select id="fFarm">
+        <option value="todos">Todas as farms</option>
+        <option value="inicio">Começo de mundo</option>
+        <option value="xp">XP</option>
+        <option value="villager">Villager e esmeralda</option>
+        <option value="nether">Nether</option>
+        <option value="redstone">Redstone</option>
+        <option value="endgame">Fim de jogo</option>
+      </select>
+      <input id="qFarm" type="search" placeholder="Buscar farm, material ou dificuldade">
+    </div>
+    <div class="grid g2" id="gradeFarm"></div>
+    <div class="empty hidden" id="vazioFarm">Nenhuma farm com esse filtro.</div>
+  </section>`;
+}
+
+function cartaoFarm(f){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(f.nome)}</h3><div class="sub">Rende ${esc(f.rende)}</div></div>
+      <span class="tag ${f.prio.indexOf("Muito")===0?"r":"b"}">${esc(f.prio)}</span>
+    </div>
+    <p>${esc(f.resumo)}</p>
+    <div class="wells"><div class="well"><div class="k">Dificuldade</div><div class="v sm">${esc(f.dif)}</div></div><div class="well"><div class="k">Prioridade</div><div class="v sm">${esc(f.prio)}</div></div></div>
+    <div><div style="font:700 10px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Como construir</div><ul class="list">${f.construir.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
+    <details class="acc"><summary>Material necessário e dicas</summary><div class="acc-body">
+      <div class="coord">${f.materiais.map(([n,d])=>`<div class="coord-row"><span class="nm">${esc(n)}</span><span class="xyz" style="font-family:var(--body);font-weight:400;color:var(--muted);white-space:normal;text-align:right;font-size:13.5px">${esc(d)}</span></div>`).join("")}</div>
+      <ul class="list">${f.dicas.map(d=>`<li>${esc(d)}</li>`).join("")}</ul>
+    </div></details>
+    <div class="note crit"><b>O que costuma quebrar:</b> ${esc(f.cuidado)}</div>
+  </div>`;
+}
+
+/* ---------- 08 REDSTONE ---------- */
+function pagRedstone(){
+  return `
+  ${cabecalho("Redstone","Componentes e circuitos que aparecem em toda farm","Pense em quatro coisas: detectar, transmitir, temporizar e mover. Quase toda farm é sensor, pulso, atuador e coleta.")}
+  <div class="filters">
+    <select id="fRed">
+      <option value="todos">Componentes e sistemas</option>
+      <option value="componentes">Só componentes</option>
+      <option value="sistemas">Só sistemas</option>
+      <option value="sinal">Sinal e lógica</option>
+      <option value="tempo">Tempo e clock</option>
+      <option value="itens">Item e armazenamento</option>
+      <option value="farm">Colheita e mob</option>
+    </select>
+    <input id="qRed" type="search" placeholder="Buscar componente, circuito ou problema">
+  </div>
+  <div id="secComp"><div class="sec-head" style="margin-top:8px"><h2 style="font-size:19px">Componentes</h2></div><div class="grid g2" id="gradeComp"></div></div>
+  <div id="secSist"><div class="sec-head" style="margin-top:26px"><h2 style="font-size:19px">Circuitos prontos</h2></div><div class="grid g2" id="gradeSist"></div></div>
+  <div class="empty hidden" id="vazioRed">Nada de redstone com esse filtro.</div>`;
+}
+
+function cartaoComp(c){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(c.nome)}</h3><div class="sub">${esc(c.papel)}</div></div>
+      <span class="tag b">${esc(c.cats[0])}</span>
+    </div>
+    <div class="wells"><div class="well"><div class="k">Receita</div><div class="v sm">${esc(c.receita)}</div></div><div class="well"><div class="k">Uso direto</div><div class="v sm">${esc(c.uso)}</div></div></div>
+    <p>${esc(c.como)}</p>
+    <div class="note"><b>Em farm:</b> ${esc(c.farms)}</div>
+    <div class="note crit"><b>Erro comum:</b> ${esc(c.erro)}</div>
+  </div>`;
+}
+
+function cartaoSist(s){
+  return `<div class="card">
+    <div class="card-head">
+      <div><h3>${esc(s.nome)}</h3><div class="sub">${esc(s.fim)}</div></div>
+      <span class="tag r">${esc(s.cats[0])}</span>
+    </div>
+    <div class="asciibox">${esc(s.desenho.join("\n"))}</div>
+    <p style="color:var(--muted);font-size:13.5px">${esc(s.chave)}</p>
+    <ol class="steps">${s.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+    <div class="note"><b>Onde aparece:</b> ${esc(s.onde)}</div>
+    <div class="note ok"><b>Ajuste fino:</b> ${esc(s.ajuste)}</div>
+    <div class="note crit"><b>Erro comum:</b> ${esc(s.erro)}</div>
+  </div>`;
+}
+
+/* =====================================================================
+   MONTAGEM E COMPORTAMENTO
+   ===================================================================== */
+const PAGINAS = {
+  entrar: pagEntrar, mundo: pagMundo, minerar: pagMinerar, encantar: pagEncantar,
+  villagers: pagVillagers, pocoes: pagPocoes, farms: pagFarms, redstone: pagRedstone
+};
+
+const RODAPE = `<footer>
+  <div><b>Minezin Emo</b> · servidor Bedrock ${esc(MUNDO.versao)} · mundo ${esc(MUNDO.nome)} · seed ${esc(MUNDO.seed)}</div>
+  <div>Coordenadas medidas com <span style="font-family:var(--mono)">locate</span> rodado no próprio servidor, a partir da origem X 0 / Z 0. Nada foi copiado de site de seed.</div>
+  <div>Preços de villager são valores base, antes de desconto por cura, reputação e Herói da Vila. O mundo roda o addon Better Trades, então alguns números ficam mais camaradas que o vanilla.</div>
+</footer>`;
+
+let atual = "entrar";
+
+function montarNav(){
+  el("railScroll").innerHTML = SECOES.map(s=>
+    `<button class="navbtn" type="button" data-sec="${s.id}" aria-current="${s.id===atual}"><span class="n">${s.n}</span>${esc(s.nome)}</button>`
+  ).join("");
+}
+
+function abrir(id){
+  if(!PAGINAS[id]) id = "entrar";
+  atual = id;
+  document.querySelectorAll("[data-sec]").forEach(b=>b.setAttribute("aria-current", String(b.dataset.sec===id)));
+  el("main").innerHTML = `<div class="page on">${PAGINAS[id]()}${RODAPE}</div>`;
+  ligar(id);
+  window.scrollTo({top:0, behavior:"instant"});
+  const btn = document.querySelector('[data-sec="'+id+'"]');
+  if(btn && window.innerWidth < 1000) btn.scrollIntoView({block:"nearest", inline:"center"});
+}
+
+/* ---- copiar ---- */
+document.addEventListener("click", async ev=>{
+  const b = ev.target.closest("[data-copy]");
+  if(!b) return;
+  const txt = b.dataset.copy;
+  try{
+    await navigator.clipboard.writeText(txt);
+  }catch(e){
+    const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }catch(_){}
+    ta.remove();
+  }
+  const antes = b.textContent;
+  b.textContent = "Copiado";
+  setTimeout(()=>{ b.textContent = antes; }, 1400);
+});
+
+/* ---- navegacao ---- */
+document.addEventListener("click", ev=>{
+  const b = ev.target.closest("[data-sec]");
+  if(!b) return;
+  abrir(b.dataset.sec);
+  history.replaceState(null,"", "#"+b.dataset.sec);
+});
+
+/* =====================================================================
+   CHECKLIST COMPARTILHADA
+   Guarda no db do artefato quando ele existe, para todo mundo que abre a
+   pagina ver o mesmo progresso. Sem db, cai para o navegador local.
+   ===================================================================== */
+const CHAVE_LOCAL = "minezin-emo-checklist";
+let marcados = {};
+let dbRef = null;
+
+try{
+  const salvo = JSON.parse(localStorage.getItem(CHAVE_LOCAL) || "{}");
+  if(salvo && typeof salvo === "object") marcados = salvo;
+}catch(e){ marcados = {}; }
+
+function salvarLocal(){
+  try{ localStorage.setItem(CHAVE_LOCAL, JSON.stringify(marcados)); }catch(e){}
+}
+
+function salvar(){
+  salvarLocal();
+  if(dbRef){
+    dbRef.set({marcados: marcados, atualizado: Date.now()}).catch(()=>{});
+  }
+}
+
+async function ligarDb(){
+  if(!window.claude || typeof window.claude.use !== "function") return;
+  let db = null;
+  try{ db = await window.claude.use("db"); }catch(e){ return; }
+  if(!db) return;
+  dbRef = db.doc("checklist/trading-hall");
+  dbRef.onSnapshot(snap=>{
+    const dados = snap && snap.exists ? snap.data() : null;
+    if(dados && dados.marcados && typeof dados.marcados === "object"){
+      marcados = dados.marcados;
+      salvarLocal();
+      if(atual === "villagers") desenhaChk();
+    }
+    const p = el("chkSync");
+    if(p){ p.textContent = "compartilhado"; p.classList.add("live"); }
+  }, ()=>{
+    const p = el("chkSync");
+    if(p){ p.textContent = "só neste aparelho"; p.classList.remove("live"); }
+  });
+}
+
+/* =====================================================================
+   FILTROS E DESENHOS POR SECAO
+   ===================================================================== */
+function texto(){ return Array.prototype.slice.call(arguments).map(x=>norm(JSON.stringify(x))).join(" "); }
+
+/* ----- mundo ----- */
+function linhaCoord(p, extra){
+  const nx = Math.round(p.x/8), nz = Math.round(p.z/8);
+  return `<div class="coord-row">
+    <span class="nm">${esc(p.nome)}${extra?`<small>${esc(extra)}</small>`:""}</span>
+    <span class="xyz">X ${p.x} / Z ${p.z}<em>${p.dist} blocos · portal no Nether X ${nx} / Z ${nz}</em></span>
+  </div>`;
+}
+
+function desenhaEstruturas(){
+  const q = norm((el("qEstrutura")||{}).value||"");
+  const vis = ESTRUTURAS.filter(e=>!q || texto(e).indexOf(q)>=0);
+  el("listaEstruturas").innerHTML = vis.length
+    ? `<div class="coord-row head"><span>Estrutura</span><span class="xyz">Coordenada</span></div>` + vis.map(e=>linhaCoord(e,e.porque)).join("")
+    : `<div class="coord-row"><span class="nm" style="color:var(--muted)">Nada encontrado.</span><span class="xyz"></span></div>`;
+}
+
+function desenhaBiomas(){
+  const f = (el("fBioma")||{}).value||"todos";
+  const q = norm((el("qBioma")||{}).value||"");
+  const rot = {cenico:"Cênico",montanha:"Montanha",caverna:"Caverna",oceano:"Oceano",comum:"Comum",recurso:"Recurso"};
+  const vis = BIOMAS.filter(b=>(f==="todos"||b.cat===f) && (!q || texto(b).indexOf(q)>=0));
+  el("listaBiomas").innerHTML = vis.length
+    ? `<div class="coord-row head"><span>Bioma</span><span class="xyz">Coordenada</span></div>` + vis.map(b=>linhaCoord(b,rot[b.cat]||b.cat)).join("")
+    : `<div class="coord-row"><span class="nm" style="color:var(--muted)">Nada encontrado.</span><span class="xyz"></span></div>`;
+}
+
+/* ----- minerio ----- */
+function desenhaMinerios(){
+  const sel = (el("fMinerio")||{}).value||"";
+  const q = norm((el("qMinerio")||{}).value||"");
+  const grade = el("gradeMinerios"), det = el("detalheMinerio");
+  if(sel){
+    const m = MINERIOS.find(x=>x.id===sel);
+    grade.innerHTML = ""; det.innerHTML = m ? detalheMinerio(m) : "";
+    return;
+  }
+  det.innerHTML = "";
+  const vis = MINERIOS.filter(m=>!q || texto(m).indexOf(q)>=0);
+  grade.innerHTML = vis.length
+    ? `<div class="grid g2">${vis.map(cartaoMinerio).join("")}</div>`
+    : `<div class="empty">Nenhum minério com esse filtro.</div>`;
+}
+
+/* ----- encantar ----- */
+function desenhaEnc(){
+  const f = (el("fEnc")||{}).value||"todos";
+  const q = norm((el("qEnc")||{}).value||"");
+  const vis = ENCANTAMENTOS.filter(e=>(f==="todos"||e.cats.indexOf(f)>=0) && (!q || texto(e).indexOf(q)>=0));
+  el("gradeEnc").innerHTML = vis.map(cartaoEnc).join("");
+  el("vazioEnc").classList.toggle("hidden", vis.length>0);
+}
+function desenhaKits(){
+  const f = (el("fKit")||{}).value||"todos";
+  const q = norm((el("qKit")||{}).value||"");
+  const vis = KITS.filter(k=>(f==="todos"||k.cat===f) && (!q || texto(k).indexOf(q)>=0));
+  el("gradeKits").innerHTML = vis.map(cartaoKit).join("");
+  el("vazioKit").classList.toggle("hidden", vis.length>0);
+}
+
+/* ----- villagers ----- */
+function desenhaVil(){
+  const f = (el("fVil")||{}).value||"todos";
+  const q = norm((el("qVil")||{}).value||"");
+  const vis = VILLAGERS.filter(v=>(f==="todos"||v.id===f) && (!q || texto(v).indexOf(q)>=0));
+  el("gradeVil").innerHTML = vis.map(cartaoVil).join("");
+  el("vazioVil").classList.toggle("hidden", vis.length>0);
+}
+function desenhaChk(){
+  const fc = (el("fChkCat")||{}).value||"todos";
+  const fs = (el("fChkStatus")||{}).value||"todos";
+  const q = norm((el("qChk")||{}).value||"");
+  const vis = CHECKLIST.filter(c=>{
+    const feito = !!marcados[c.id];
+    if(fc!=="todos" && c.cat!==fc) return false;
+    if(fs==="pendente" && feito) return false;
+    if(fs==="feito" && !feito) return false;
+    return !q || texto(c).indexOf(q)>=0;
+  });
+  const g = el("gradeChk");
+  if(!g) return;
+  g.innerHTML = vis.map(c=>cartaoChk(c, !!marcados[c.id])).join("");
+  el("vazioChk").classList.toggle("hidden", vis.length>0);
+  const total = CHECKLIST.length;
+  const feitos = CHECKLIST.filter(c=>marcados[c.id]).length;
+  const pct = total ? Math.round(feitos/total*100) : 0;
+  el("chkBarra").style.width = pct+"%";
+  const ess = CHECKLIST.filter(c=>c.prio==="essencial");
+  const essF = ess.filter(c=>marcados[c.id]).length;
+  el("chkResumo").textContent = feitos+" de "+total+" villagers ("+pct+"%) · essenciais "+essF+" de "+ess.length;
+}
+
+/* ----- pocoes / farms / redstone ----- */
+function desenhaPoc(){
+  const f = (el("fPoc")||{}).value||"todos";
+  const q = norm((el("qPoc")||{}).value||"");
+  const vis = POCOES.filter(p=>(f==="todos"||p.cats.indexOf(f)>=0) && (!q || texto(p).indexOf(q)>=0));
+  el("gradePoc").innerHTML = vis.map(cartaoPoc).join("");
+  el("vazioPoc").classList.toggle("hidden", vis.length>0);
+}
+function desenhaFarms(){
+  const f = (el("fFarm")||{}).value||"todos";
+  const q = norm((el("qFarm")||{}).value||"");
+  const vis = FARMS.filter(x=>(f==="todos"||x.cats.indexOf(f)>=0) && (!q || texto(x).indexOf(q)>=0));
+  el("gradeFarm").innerHTML = vis.map(cartaoFarm).join("");
+  el("vazioFarm").classList.toggle("hidden", vis.length>0);
+}
+function desenhaMat(){
+  const q = norm((el("qMat")||{}).value||"");
+  const vis = MATERIAIS.filter(m=>!q || norm(m.join(" ")).indexOf(q)>=0);
+  el("listaMat").innerHTML = vis.length
+    ? `<div class="coord-row head"><span>Material</span><span class="xyz">Melhor caminho</span></div>` + vis.map(m=>
+        `<div class="coord-row"><span class="nm">${esc(m[0])}<small>${esc(m[5])}</small></span>
+         <span class="xyz" style="font-family:var(--body);font-weight:600;white-space:normal;text-align:right;font-size:14px">${esc(m[3])}<em>quando: ${esc(m[6])}</em></span></div>`).join("")
+    : `<div class="coord-row"><span class="nm" style="color:var(--muted)">Nada encontrado.</span><span class="xyz"></span></div>`;
+}
+function desenhaRed(){
+  const f = (el("fRed")||{}).value||"todos";
+  const q = norm((el("qRed")||{}).value||"");
+  const mostraC = f!=="sistemas", mostraS = f!=="componentes";
+  const cat = ["sinal","tempo","itens","farm"].indexOf(f)>=0 ? f : "";
+  const vc = COMPONENTES.filter(c=>mostraC && (!cat||c.cats.indexOf(cat)>=0) && (!q || texto(c).indexOf(q)>=0));
+  const vs = SISTEMAS.filter(s=>mostraS && (!cat||s.cats.indexOf(cat)>=0) && (!q || texto(s).indexOf(q)>=0));
+  el("secComp").classList.toggle("hidden", vc.length===0);
+  el("secSist").classList.toggle("hidden", vs.length===0);
+  el("gradeComp").innerHTML = vc.map(cartaoComp).join("");
+  el("gradeSist").innerHTML = vs.map(cartaoSist).join("");
+  el("vazioRed").classList.toggle("hidden", vc.length+vs.length>0);
+}
+
+/* ---- liga os controles de cada pagina depois de montar ---- */
+function on(id, ev, fn){ const n = el(id); if(n) n.addEventListener(ev, fn); }
+
+function ligar(sec){
+  if(sec==="mundo"){
+    desenhaEstruturas(); desenhaBiomas();
+    on("qEstrutura","input",desenhaEstruturas);
+    on("fBioma","change",desenhaBiomas); on("qBioma","input",desenhaBiomas);
+    const zb = el("zoomBar");
+    if(zb) zb.addEventListener("click", ev=>{
+      const b = ev.target.closest("[data-raio]"); if(!b) return;
+      zb.querySelectorAll("[data-raio]").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+      el("mapBox").innerHTML = svgMapa(parseInt(b.dataset.raio,10));
+    });
+  }
+  if(sec==="minerar"){
+    desenhaMinerios();
+    on("fMinerio","change",desenhaMinerios); on("qMinerio","input",desenhaMinerios);
+    on("limpaMinerio","click",()=>{ if(el("fMinerio")) el("fMinerio").value=""; if(el("qMinerio")) el("qMinerio").value=""; desenhaMinerios(); });
+    const g = el("gradeMinerios");
+    if(g) g.addEventListener("click", ev=>{
+      const b = ev.target.closest("[data-minerio]"); if(!b) return;
+      el("fMinerio").value = b.dataset.minerio; desenhaMinerios(); window.scrollTo({top:0,behavior:"smooth"});
+    });
+    const d = el("detalheMinerio");
+    if(d) d.addEventListener("click", ev=>{
+      if(!ev.target.closest("#voltaMinerios")) return;
+      el("fMinerio").value = ""; desenhaMinerios(); window.scrollTo({top:0,behavior:"smooth"});
+    });
+  }
+  if(sec==="encantar"){
+    desenhaKits(); desenhaEnc();
+    on("fKit","change",desenhaKits); on("qKit","input",desenhaKits);
+    on("fEnc","change",desenhaEnc); on("qEnc","input",desenhaEnc);
+  }
+  if(sec==="villagers"){
+    desenhaChk(); desenhaVil();
+    on("fChkCat","change",desenhaChk); on("fChkStatus","change",desenhaChk); on("qChk","input",desenhaChk);
+    on("fVil","change",desenhaVil); on("qVil","input",desenhaVil);
+    const g = el("gradeChk");
+    if(g) g.addEventListener("change", ev=>{
+      const c = ev.target.closest("[data-chk]"); if(!c) return;
+      if(c.checked) marcados[c.dataset.chk] = true; else delete marcados[c.dataset.chk];
+      salvar(); desenhaChk();
+    });
+    on("chkLimpar","click",()=>{
+      if(!window.confirm("Desmarcar todos os villagers da checklist? Isso vale para todo mundo que abrir a página.")) return;
+      marcados = {}; salvar(); desenhaChk();
+    });
+    if(dbRef){ const p = el("chkSync"); if(p){ p.textContent="compartilhado"; p.classList.add("live"); } }
+  }
+  if(sec==="pocoes"){ desenhaPoc(); on("fPoc","change",desenhaPoc); on("qPoc","input",desenhaPoc); }
+  if(sec==="farms"){
+    desenhaMat(); desenhaFarms();
+    on("qMat","input",desenhaMat);
+    on("fFarm","change",desenhaFarms); on("qFarm","input",desenhaFarms);
+  }
+  if(sec==="redstone"){ desenhaRed(); on("fRed","change",desenhaRed); on("qRed","input",desenhaRed); }
+}
+
+/* ---- inicio ---- */
+montarNav();
+abrir((location.hash||"").replace("#","") || "entrar");
+ligarDb();
+
+/* A barra lateral gruda logo abaixo do topo. Medimos a altura de verdade em
+   vez de chutar um numero fixo: com a fonte ainda carregando, com zoom ou
+   com o nome maior, o chute deixaria a navegacao por cima do texto. */
+(function medirTopo(){
+  const topo = document.querySelector(".topbar");
+  if(!topo) return;
+  const aplica = () => document.documentElement.style.setProperty(
+    "--head-h", Math.round(topo.getBoundingClientRect().height) + "px");
+  aplica();
+  if(window.ResizeObserver) new ResizeObserver(aplica).observe(topo);
+  else addEventListener("resize", aplica);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(aplica);
+})();
+</script>
+
+</body></html>
