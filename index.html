@@ -505,7 +505,7 @@ const MUNDO = {
   seed: "2684991254",
   nome: "MundoCerejeira",
   versao: "1.26.45",
-  spawn: { x: -22, z: 94 },
+  spawn: { x: -1429, y: 69, z: 828 },
   desc: "cherry grove com lago cenico no spawn",
   nota: 100
 };
@@ -1732,11 +1732,13 @@ function svgMapa(raio){
 
   /* spawn */
   const [sx,sy]=px(MUNDO.spawn);
+  if(Math.abs(MUNDO.spawn.x) <= raio && Math.abs(MUNDO.spawn.z) <= raio){
   g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="10" fill="none" stroke="#0A0608" stroke-width="4"/>`;
   g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="10" fill="none" stroke="#FFFFFF" stroke-width="2"/>`;
   g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="2.5" fill="#FFFFFF"/>`;
   g += `<text x="${(sx+15).toFixed(1)}" y="${(sy-11).toFixed(1)}" fill="#0A0608" stroke="#0A0608" stroke-width="4" stroke-linejoin="round" font-family="Instrument Sans, system-ui, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.4">SPAWN</text>`;
   g += `<text x="${(sx+15).toFixed(1)}" y="${(sy-11).toFixed(1)}" fill="#FFFFFF" font-family="Instrument Sans, system-ui, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.4">SPAWN</text>`;
+  }
   g += `</svg>`;
   return g;
 }
@@ -2010,7 +2012,9 @@ function telaInicio(){
 function telaMundo(){
   return ferr("O mapa", "daqui", BIOMAS.length + " biomas · " + ESTRUTURAS.length + " estruturas") +
   '<p class="dica">Cada coordenada saiu do comando <span class="mo">locate</span> rodado no nosso servidor, na ' +
-    esc(MUNDO.versao) + ', com a nossa seed. Arraste o mapa para mover e use a roda para aproximar.</p>' +
+    esc(MUNDO.versao) + ', com a nossa seed. As distâncias são contadas da origem <span class="mo">X 0 / Z 0</span>, ' +
+    'não do spawn — o spawn fica em <span class="mo">X ' + MUNDO.spawn.x + ' / Z ' + MUNDO.spawn.z + '</span> e só ' +
+    'aparece no mapa quando cabe no alcance escolhido. Arraste para mover e use a roda para aproximar.</p>' +
   '<div class="mp"><div class="mp-g">' +
     '<div class="mp-cx" id="mapaCx"><div id="mapaAlvo">' + svgMapa(600) + '</div></div>' +
     '<div class="mp-lg">' +
